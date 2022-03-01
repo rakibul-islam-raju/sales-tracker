@@ -28,8 +28,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
     # Local
-    "core.apps.CoreConfig",
     "users.apps.UsersConfig",
+    "inventory.apps.InventoryConfig",
 ]
 
 MIDDLEWARE = [

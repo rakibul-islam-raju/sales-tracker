@@ -29,6 +29,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ("created_at",)
+        verbose_name = "User"
 
 
 class UserActivities(models.Model):

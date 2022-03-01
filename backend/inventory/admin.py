@@ -6,7 +6,7 @@ from django.apps import apps
 """ 
 register all the models from this app
 """
-app_models = apps.get_app_config("users").get_models()
+app_models = apps.get_app_config("inventory").get_models()
 for model in app_models:
     try:
         admin.site.register(model)
