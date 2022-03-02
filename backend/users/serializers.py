@@ -5,7 +5,7 @@ from .models import CustomUser
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    email = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
     access = serializers.SerializerMethodField(read_only=True)
     refresh = serializers.SerializerMethodField(read_only=True)
 

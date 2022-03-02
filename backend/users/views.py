@@ -39,8 +39,8 @@ class LoginView(APIView):
             )
 
         # last login
-        user.last_login = datetime.now()
-        user.save()
+        # user.last_login = datetime.now()
+        # user.save()
 
         return Response({"detail": self.serializer_class(user).data})
 
