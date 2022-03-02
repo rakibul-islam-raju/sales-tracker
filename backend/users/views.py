@@ -34,7 +34,7 @@ class LoginView(APIView):
 
         if not user:
             return Response(
-                {"Email/Password": "Invalid email or password"},
+                ("Invalid email or password"),
                 status=status.HTTP_400_BAD_REQUEST,
             )
 

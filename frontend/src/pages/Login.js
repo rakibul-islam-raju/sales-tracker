@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,27 +11,31 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import axios, { AxiosError } from "axios";
-import { loginUrl } from "../Components/utils";
-import { log } from "console";
+import Spinner from "../components/Spinner";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/actions/userActions";
+import Messages from "../components/Messages";
 
-interface Props {}
+const Login = () => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
-const Login: FC = (props: Props) => {
-	const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		// console.log({
-		// 	email: data.get("email"),
-		// 	password: data.get("password"),
-		// });
-		try {
-			const response = await axios.post(loginUrl, data);
-			console.log("response=>", response.data);
-		} catch (error) {
-			console.log("error =>", error);
-		}
+	const userLogin = useSelector((state) => state.userLogin);
+	const { loading, error, userInfo } = userLogin;
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		const data = new FormData(e.currentTarget);
+
+		dispatch(login(data));
 	};
+
+	useEffect(() => {
+		if (userInfo?.access) {
+			navigate("/dashboard");
+		}
+	}, [navigate, userInfo]);
 
 	return (
 		<Container component="main" maxWidth="xs">
@@ -50,6 +54,11 @@ const Login: FC = (props: Props) => {
 				<Typography component="h1" variant="h5">
 					Sign in
 				</Typography>
+
+				{error && typeof error !== "object" && (
+					<Messages type="error" text={error} />
+				)}
+
 				<Box
 					component="form"
 					onSubmit={handleSubmit}
@@ -66,6 +75,8 @@ const Login: FC = (props: Props) => {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						error={error?.email}
+						helperText={error?.email}
 					/>
 					<TextField
 						margin="normal"
@@ -81,14 +92,19 @@ const Login: FC = (props: Props) => {
 						control={<Checkbox value="remember" color="primary" />}
 						label="Remember me"
 					/>
-					<Button
-						type="submit"
-						fullWidth
-						variant="contained"
-						sx={{ mt: 3, mb: 2 }}
-					>
-						Sign In
-					</Button>
+
+					{loading ? (
+						<Spinner />
+					) : (
+						<Button
+							type="submit"
+							fullWidth
+							variant="contained"
+							sx={{ mt: 3, mb: 2 }}
+						>
+							Sign In
+						</Button>
+					)}
 					<Grid container>
 						<Grid item xs>
 							<Link href="#" variant="body2">
