@@ -3,10 +3,12 @@ import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
 
 import { userLoginReducer } from "./redurers/userReduces";
+import { productListReducer } from "./redurers/productReducers";
 
 // Combine reducers
 const reducer = combineReducers({
 	userLogin: userLoginReducer,
+	productList: productListReducer,
 });
 
 // get userInfo from local storage

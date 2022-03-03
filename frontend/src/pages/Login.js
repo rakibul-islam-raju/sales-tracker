@@ -33,7 +33,7 @@ const Login = () => {
 
 	useEffect(() => {
 		if (userInfo?.access) {
-			navigate("/dashboard");
+			navigate("/");
 		}
 	}, [navigate, userInfo]);
 

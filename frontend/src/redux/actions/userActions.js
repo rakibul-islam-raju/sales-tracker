@@ -7,6 +7,7 @@ import {
 import { loginUrl } from "../../utils/urls";
 
 export const login = (credential) => async (dispatch) => {
+	console.log("trigerred =>>");
 	try {
 		dispatch({ type: USER_LOGIN_REQUEST });
 
