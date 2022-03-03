@@ -1,53 +1,40 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { listProducts } from "../redux/actions/productActions";
-import { DataGrid } from "@mui/x-data-grid";
-import Messages from "../components/Messages";
+import React from "react";
+import Button from "@mui/material/Button";
+import { Box } from "@mui/system";
 
-const columns = [
-	{ field: "id", headerName: "ID" },
-	{ field: "name", headerName: "First name" },
-	{
-		field: "price",
-		headerName: "Price",
-		type: "number",
-	},
-	{
-		field: "quantity",
-		headerName: "Quantity",
-		type: "number",
-	},
-];
-
-const rows = [
-	{ id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-	{ id: 2, lastName: "Lannister", firstName: "Cersei", age: 42 },
-	{ id: 3, lastName: "Lannister", firstName: "Jaime", age: 45 },
-	{ id: 4, lastName: "Stark", firstName: "Arya", age: 16 },
-];
+import AddIcon from "@mui/icons-material/Add";
+import ProductTable from "../components/Dashboard/tables/ProductTable";
+import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
+import FormModal from "../components/FormModal";
 
 const Products = () => {
-	const dispatch = useDispatch();
+	const [open, setOpen] = React.useState(false);
 
-	const productList = useSelector((state) => state.productList);
-	const { loading, error, products } = productList;
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
 
-	useEffect(() => {
-		if (!products || products.length === 0) {
-			dispatch(listProducts());
-		}
-	}, [dispatch, products]);
+	const handleClose = () => {
+		setOpen(false);
+	};
 
 	return (
-		<div style={{ height: 600, width: "100%" }}>
-			<DataGrid
-				rows={rows}
-				columns={columns}
-				pageSize={5}
-				rowsPerPageOptions={[5]}
-				checkboxSelection
+		<>
+			<FormModal
+				open={open}
+				handleClose={handleClose}
+				title="Create New Product"
+				width=""
+				formElement={<ProductCreateForm setOpen={setOpen} />}
 			/>
-		</div>
+			<Box mb={4} display="flex" justifyContent="flex-end">
+				<Button variant="contained" onClick={handleClickOpen}>
+					<AddIcon /> New Product
+				</Button>
+			</Box>
+
+			<ProductTable />
+		</>
 	);
 };
 

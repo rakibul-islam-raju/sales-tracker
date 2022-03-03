@@ -4,7 +4,7 @@ import AllInboxIcon from "@mui/icons-material/AllInbox";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import CategoryIcon from "@mui/icons-material/Category";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const mainMenus = [
 	{ title: "Dashboard", path: "/", icon: <DashboardIcon /> },

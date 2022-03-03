@@ -24,7 +24,7 @@ class Product(BaseModel):
     code = models.CharField(max_length=10, unique=True, null=True)
     quantity = models.PositiveIntegerField(default=0)
     price = models.DecimalField(max_digits=8, decimal_places=2)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ["-created_at"]
