@@ -6,6 +6,8 @@ import { userLoginReducer } from "./redurers/userReduces";
 import {
 	productListReducer,
 	productCreateReducer,
+	productEditReducer,
+	productDeleteReducer,
 } from "./redurers/productReducers";
 
 // Combine reducers
@@ -13,6 +15,8 @@ const reducer = combineReducers({
 	userLogin: userLoginReducer,
 	productList: productListReducer,
 	productCreate: productCreateReducer,
+	productEdit: productEditReducer,
+	productDelete: productDeleteReducer,
 });
 
 // get userInfo from local storage

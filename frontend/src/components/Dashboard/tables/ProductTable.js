@@ -1,6 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { listProducts } from "../../../redux/actions/productActions";
+import {
+	listProducts,
+	deleteProducts,
+} from "../../../redux/actions/productActions";
+import {
+	PRODUCT_LIST_RESET,
+	PRODUCT_DELETE_RESET,
+} from "../../../redux/constants/productConstants";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -14,23 +21,84 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Messages from "../../../components/Messages";
 import Spinner from "../../../components/Spinner";
+import ConfirmModal from "../../ConfirmModal";
 
-const ProductTable = () => {
+const ProductTable = ({ handleProductEdit }) => {
 	const dispatch = useDispatch();
 
+	const [openDeleteModal, setOpenDeleteModal] = useState(false);
+	const [deleteVal, setDeleteVal] = useState(false);
+	const [currentID, setCurrentID] = useState(null);
+
+	// product list state
 	const productList = useSelector((state) => state.productList);
-	const { loading, error, products } = productList;
+	const { loading: listLoading, error: listError, products } = productList;
+
+	// product delete state
+	const productDelete = useSelector((state) => state.productDelete);
+	const {
+		loading: deleteLoading,
+		error: deleteError,
+		success: deleteSuccess,
+	} = productDelete;
+
+	// handler for product delete
+	const handleProductDelete = (id) => {
+		// open confirm modal
+		setOpenDeleteModal(true);
+		setCurrentID(id);
+	};
+
+	// on close confirm modal
+	const handleClose = (newValue) => {
+		// cloase confirm modal
+		setOpenDeleteModal(false);
+
+		// value from confirm modal
+		if (newValue) {
+			setDeleteVal(true);
+			dispatch(deleteProducts(currentID));
+			setCurrentID(null);
+		}
+	};
 
 	useEffect(() => {
 		if (!products || products.length === 0) {
+			console.log("fired ===========>>");
 			dispatch(listProducts());
 		}
+
+		// after delete
+		if (deleteSuccess) {
+			setDeleteVal(false);
+			dispatch({ type: PRODUCT_DELETE_RESET });
+			dispatch({ type: PRODUCT_LIST_RESET });
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [dispatch]);
+	}, [dispatch, deleteSuccess]);
+
 	return (
 		<TableContainer component={Paper}>
-			{loading && <Spinner />}
-			{error && <Messages type="error" error={error} />}
+			{(listLoading || deleteLoading) && <Spinner />}
+
+			{listError && typeof listError !== "object" && (
+				<Messages type="error" text={listError} />
+			)}
+
+			{deleteError && typeof deleteError !== "object" && (
+				<Messages type="error" text={deleteError} />
+			)}
+
+			<ConfirmModal
+				id="ringtone-menu"
+				keepMounted
+				open={openDeleteModal}
+				value={deleteVal}
+				onClose={handleClose}
+				title="Delete Product"
+				desc="Are you sure to delete this product? This action cannot be undo!"
+			/>
+
 			<Table
 				sx={{ minWidth: 650 }}
 				aria-label="simple table"
@@ -61,10 +129,18 @@ const ProductTable = () => {
 							<TableCell align="right">{row.quantity}</TableCell>
 							<TableCell align="right">
 								<ButtonGroup>
-									<Button variant="outline">
+									<Button
+										variant="outline"
+										onClick={() => handleProductEdit(row)}
+									>
 										<EditIcon color="primary" />
 									</Button>
-									<Button variant="outline">
+									<Button
+										variant="outline"
+										onClick={() =>
+											handleProductDelete(row.id)
+										}
+									>
 										<DeleteIcon color="error" />
 									</Button>
 								</ButtonGroup>
