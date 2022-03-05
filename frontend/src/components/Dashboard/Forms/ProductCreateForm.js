@@ -14,16 +14,26 @@ import {
 	createProducts,
 	editProducts,
 } from "../../../redux/actions/productActions";
+import { listCategories } from "../../../redux/actions/categoryActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
+import {
+	FormControl,
+	FormHelperText,
+	InputLabel,
+	MenuItem,
+	Select,
+} from "@mui/material";
 
 const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 	const [name, setName] = useState(initialData?.name || null);
 	const [price, setPrice] = useState(initialData?.price || null);
 	const [quantity, setQuantity] = useState(initialData?.quantity || null);
+	const [category, setCategory] = useState(initialData?.category?.id || null);
 
 	const dispatch = useDispatch();
 
+	// product create state
 	const productCreate = useSelector((state) => state.productCreate);
 	const {
 		loading: createLoading,
@@ -31,6 +41,7 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 		success: createSuccess,
 	} = productCreate;
 
+	// product edit state
 	const productEdit = useSelector((state) => state.productEdit);
 	const {
 		loading: editLoading,
@@ -38,10 +49,20 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 		success: editSuccess,
 	} = productEdit;
 
+	// categories list state
+	const categoryList = useSelector((state) => state.categoryList);
+	const {
+		loading: categoryLoading,
+		error: categoryError,
+		categories,
+	} = categoryList;
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		const data = new FormData(e.currentTarget);
+
+		console.log("formdata =>", data.get("category"));
 		if (!initialData) {
 			dispatch(createProducts(data));
 		} else {
@@ -54,21 +75,31 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 			setOpen(false);
 			dispatch({ type: PRODUCT_CREATE_RESET });
 			dispatch(listProducts());
-		} else if (editSuccess) {
+		}
+		if (editSuccess) {
 			setOpen(false);
 			dispatch({ type: PRODUCT_EDIT_RESET });
 			dispatch(listProducts());
 		}
+		if (!categories || categories.length === 0) {
+			dispatch(listCategories());
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [createSuccess, editSuccess, dispatch, setOpen]);
+
+	console.log("initial category =>", category);
 
 	return (
 		<Box component="form" onSubmit={handleSubmit}>
-			{(createLoading || editLoading) && <Spinner />}
+			{(createLoading || editLoading || categoryLoading) && <Spinner />}
 			{editError && typeof editError !== "object" && (
 				<Messages type="error" text={editError} />
 			)}
 			{createError && typeof createError !== "object" && (
 				<Messages type="error" text={createError} />
+			)}
+			{categoryError && typeof categoryError !== "object" && (
+				<Messages type="error" text={categoryError} />
 			)}
 
 			<TextField
@@ -79,6 +110,7 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 				label="Product Name"
 				type="text"
 				fullWidth
+				autoComplete="false"
 				variant="standard"
 				value={name}
 				error={createError?.name || editError?.name}
@@ -86,16 +118,42 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 				onChange={(e) => setName(e.target.value)}
 			/>
 			<Box display="flex" justifyContent="space-between">
+				<FormControl
+					variant="standard"
+					fullWidth
+					margin="dense"
+					error={createError?.category || editError?.category}
+				>
+					<InputLabel id="category">Category</InputLabel>
+					<Select
+						labelId="category"
+						id="category"
+						name="category"
+						value={category}
+						label="Category"
+						onChange={(e) => setCategory(e.target.value)}
+					>
+						{categories?.map((cat) => (
+							<MenuItem key={cat.id} value={cat.id}>
+								{cat.name}
+							</MenuItem>
+						))}
+					</Select>
+					<FormHelperText>
+						{createError?.category[0] || editError?.category[0]}
+					</FormHelperText>
+				</FormControl>
 				<TextField
 					margin="dense"
 					id="price"
 					name="price"
 					label="Product Price"
 					type="number"
+					autoComplete="false"
 					variant="standard"
 					value={price}
 					error={createError?.price || editError?.price}
-					helperText={createError?.price || createError?.price}
+					helperText={createError?.price || editError?.price}
 					onChange={(e) => setPrice(e.target.value)}
 				/>
 				<TextField
@@ -104,6 +162,7 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 					name="quantity"
 					label="Product Quantity"
 					type="number"
+					autoComplete="false"
 					variant="standard"
 					value={quantity}
 					error={createError?.quantity || editError?.quantity}

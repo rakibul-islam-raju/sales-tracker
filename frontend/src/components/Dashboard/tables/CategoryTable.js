@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	listProducts,
-	deleteProducts,
-} from "../../../redux/actions/productActions";
+	listCategories,
+	deleteCategories,
+} from "../../../redux/actions/categoryActions";
 import {
-	PRODUCT_LIST_RESET,
-	PRODUCT_DELETE_RESET,
-} from "../../../redux/constants/productConstants";
+	CATEGORY_LIST_RESET,
+	CATEGORY_DELETE_RESET,
+} from "../../../redux/constants/categoryConstants";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -23,27 +23,27 @@ import Messages from "../../../components/Messages";
 import Spinner from "../../../components/Spinner";
 import ConfirmModal from "../../ConfirmModal";
 
-const ProductTable = ({ handleProductEdit }) => {
+const CategoryTable = ({ handleCategoryEdit }) => {
 	const dispatch = useDispatch();
 
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 	const [deleteVal, setDeleteVal] = useState(false);
 	const [currentID, setCurrentID] = useState(null);
 
-	// product list state
-	const productList = useSelector((state) => state.productList);
-	const { loading: listLoading, error: listError, products } = productList;
+	// category list state
+	const categoryList = useSelector((state) => state.categoryList);
+	const { loading: listLoading, error: listError, categories } = categoryList;
 
-	// product delete state
-	const productDelete = useSelector((state) => state.productDelete);
+	// category delete state
+	const categoryDelete = useSelector((state) => state.categoryDelete);
 	const {
 		loading: deleteLoading,
 		error: deleteError,
 		success: deleteSuccess,
-	} = productDelete;
+	} = categoryDelete;
 
-	// handler for product delete
-	const handleProductDelete = (id) => {
+	// handler for category delete
+	const handleCategoryDelete = (id) => {
 		// open confirm modal
 		setOpenDeleteModal(true);
 		setCurrentID(id);
@@ -57,21 +57,21 @@ const ProductTable = ({ handleProductEdit }) => {
 		// value from confirm modal
 		if (newValue) {
 			setDeleteVal(true);
-			dispatch(deleteProducts(currentID));
+			dispatch(deleteCategories(currentID));
 			setCurrentID(null);
 		}
 	};
 
 	useEffect(() => {
-		if (!products || products.length === 0) {
-			dispatch(listProducts());
+		if (!categories || categories.length === 0) {
+			dispatch(listCategories());
 		}
 
 		// after delete
 		if (deleteSuccess) {
 			setDeleteVal(false);
-			dispatch({ type: PRODUCT_DELETE_RESET });
-			dispatch({ type: PRODUCT_LIST_RESET });
+			dispatch({ type: CATEGORY_DELETE_RESET });
+			dispatch({ type: CATEGORY_LIST_RESET });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, deleteSuccess]);
@@ -94,8 +94,8 @@ const ProductTable = ({ handleProductEdit }) => {
 				open={openDeleteModal}
 				value={deleteVal}
 				onClose={handleClose}
-				title="Delete Product"
-				desc="Are you sure to delete this product? This action cannot be undo!"
+				title="Delete Category"
+				desc="Are you sure to delete this category? This action cannot be undo!"
 			/>
 
 			<Table
@@ -105,16 +105,14 @@ const ProductTable = ({ handleProductEdit }) => {
 			>
 				<TableHead>
 					<TableRow>
-						<TableCell>Product</TableCell>
-						<TableCell align="right">Code</TableCell>
-						<TableCell align="right">Category</TableCell>
-						<TableCell align="right">Price</TableCell>
-						<TableCell align="right">Quantity</TableCell>
+						<TableCell>Category</TableCell>
+						<TableCell align="right">Created at</TableCell>
+						<TableCell align="right">Updated at</TableCell>
 						<TableCell align="right">Actions</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{products?.map((row) => (
+					{categories?.map((row) => (
 						<TableRow
 							key={row.id}
 							sx={{
@@ -124,24 +122,24 @@ const ProductTable = ({ handleProductEdit }) => {
 							}}
 						>
 							<TableCell>{row.name}</TableCell>
-							<TableCell align="right">ASD002</TableCell>
 							<TableCell align="right">
-								{row.category?.name}
+								{new Date(row.created_at).toLocaleDateString()}
 							</TableCell>
-							<TableCell align="right">{row.price}</TableCell>
-							<TableCell align="right">{row.quantity}</TableCell>
+							<TableCell align="right">
+								{new Date(row.updated_at).toLocaleDateString()}
+							</TableCell>
 							<TableCell align="right">
 								<ButtonGroup>
 									<Button
 										variant="outline"
-										onClick={() => handleProductEdit(row)}
+										onClick={() => handleCategoryEdit(row)}
 									>
 										<EditIcon color="primary" />
 									</Button>
 									<Button
 										variant="outline"
 										onClick={() =>
-											handleProductDelete(row.id)
+											handleCategoryDelete(row.id)
 										}
 									>
 										<DeleteIcon color="error" />
@@ -156,4 +154,4 @@ const ProductTable = ({ handleProductEdit }) => {
 	);
 };
 
-export default ProductTable;
+export default CategoryTable;

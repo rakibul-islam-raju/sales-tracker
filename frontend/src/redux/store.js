@@ -9,14 +9,26 @@ import {
 	productEditReducer,
 	productDeleteReducer,
 } from "./redurers/productReducers";
+import {
+	categoryListReducer,
+	categoryCreateReducer,
+	categoryEditReducer,
+	categoryDeleteReducer,
+} from "./redurers/categoryReducers";
 
 // Combine reducers
 const reducer = combineReducers({
 	userLogin: userLoginReducer,
+	// products
 	productList: productListReducer,
 	productCreate: productCreateReducer,
 	productEdit: productEditReducer,
 	productDelete: productDeleteReducer,
+	// categories
+	categoryList: categoryListReducer,
+	categoryCreate: categoryCreateReducer,
+	categoryEdit: categoryEditReducer,
+	categoryDelete: categoryDeleteReducer,
 });
 
 // get userInfo from local storage

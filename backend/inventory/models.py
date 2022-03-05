@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.db import models
 
 from utils.models import BaseModel
@@ -6,7 +7,6 @@ from users.models import CustomUser
 
 class Category(BaseModel):
     name = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
 
     class Meta:
         ordering = ["-created_at"]
@@ -17,7 +17,7 @@ class Category(BaseModel):
 
 
 class Product(BaseModel):
-    categoty = models.ForeignKey(
+    category = models.ForeignKey(
         Category, on_delete=models.SET_NULL, blank=True, null=True
     )
     name = models.CharField(max_length=100, unique=True)

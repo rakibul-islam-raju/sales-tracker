@@ -5,14 +5,10 @@ import AddIcon from "@mui/icons-material/Add";
 import ProductTable from "../components/Dashboard/tables/ProductTable";
 import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
 import FormModal from "../components/FormModal";
-import { PRODUCT_CREATE_RESET } from "../redux/constants/productConstants";
-import { useDispatch, useSelector } from "react-redux";
 
 const Products = () => {
 	const [open, setOpen] = React.useState(false);
 	const [editProduct, setEditProduct] = React.useState(null);
-
-	const dispatch = useDispatch();
 
 	// modal close handler
 	const handleClose = () => {

@@ -4,7 +4,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 const FormModal = ({ open, handleClose, title, formElement }) => {
 	return (
-		<Dialog open={open} onClose={handleClose} fullWidth>
+		<Dialog keepMounted open={open} onClose={handleClose} fullWidth>
 			<DialogTitle>{title}</DialogTitle>
 			<DialogContent>{formElement}</DialogContent>
 		</Dialog>

@@ -14,6 +14,7 @@ from inventory.models import Category, Product, Shop, Order, OrderItem
 from .serializers import (
     CategorySerializer,
     ProductSerializer,
+    ProductCreateSerializer,
     ShopSerializer,
     OrderSerializer,
     OrderItemSerializer,
@@ -36,18 +37,28 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
-    serializer_class = ProductSerializer
     queryset = Product.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ProductSerializer
+        else:
+            return ProductCreateSerializer
+
 
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = ProductSerializer
     queryset = Product.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return ProductSerializer
+        else:
+            return ProductCreateSerializer
 
 
 class ShopListCreateView(generics.ListCreateAPIView):
