@@ -94,7 +94,7 @@ export const editCategories =
 				},
 			};
 
-			const { data } = await axios.put(
+			const { data } = await axios.patch(
 				categoryUrl + id + "/",
 				categoryData,
 				config

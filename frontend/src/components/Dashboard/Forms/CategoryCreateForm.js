@@ -16,16 +16,9 @@ import {
 } from "../../../redux/actions/categoryActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
-import {
-	FormControl,
-	FormHelperText,
-	InputLabel,
-	MenuItem,
-	Select,
-} from "@mui/material";
 
 const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
-	const [name, setName] = useState(initialData?.name || null);
+	const [name, setName] = useState("");
 
 	const dispatch = useDispatch();
 
@@ -72,6 +65,16 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [createSuccess, editSuccess, dispatch, setOpen]);
 
+	// set initial value
+	useEffect(() => {
+		// setProductData(initialData);
+		if (initialData) {
+			setName(initialData.name);
+		} else {
+			setName("");
+		}
+	}, [initialData]);
+
 	return (
 		<Box component="form" onSubmit={handleSubmit}>
 			{(createLoading || editLoading) && <Spinner />}
@@ -94,7 +97,7 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 				variant="standard"
 				value={name}
 				error={createError?.name || editError?.name}
-				helperText={createError?.name || createError?.name}
+				helperText={createError?.name || editError?.name}
 				onChange={(e) => setName(e.target.value)}
 			/>
 

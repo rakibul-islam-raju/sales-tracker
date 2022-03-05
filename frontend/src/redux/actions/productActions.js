@@ -88,7 +88,7 @@ export const editProducts = (id, productData) => async (dispatch, getState) => {
 			},
 		};
 
-		const { data } = await axios.put(
+		const { data } = await axios.patch(
 			productsUrl + id + "/",
 			productData,
 			config

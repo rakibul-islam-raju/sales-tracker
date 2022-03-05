@@ -26,10 +26,10 @@ import {
 } from "@mui/material";
 
 const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
-	const [name, setName] = useState(initialData?.name || null);
-	const [price, setPrice] = useState(initialData?.price || null);
-	const [quantity, setQuantity] = useState(initialData?.quantity || null);
-	const [category, setCategory] = useState(initialData?.category?.id || null);
+	const [name, setName] = useState("");
+	const [price, setPrice] = useState(0);
+	const [quantity, setQuantity] = useState(0);
+	const [category, setCategory] = useState(0);
 
 	const dispatch = useDispatch();
 
@@ -62,7 +62,6 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 
 		const data = new FormData(e.currentTarget);
 
-		console.log("formdata =>", data.get("category"));
 		if (!initialData) {
 			dispatch(createProducts(data));
 		} else {
@@ -87,7 +86,23 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [createSuccess, editSuccess, dispatch, setOpen]);
 
-	console.log("initial category =>", category);
+	// set initial value
+	useEffect(() => {
+		// setProductData(initialData);
+		if (initialData) {
+			setName(initialData.name);
+			setPrice(initialData.price);
+			setQuantity(initialData.quantity);
+			setCategory(initialData.category?.id);
+		} else {
+			setName("");
+			setPrice(0);
+			setQuantity(0);
+			setCategory(0);
+		}
+	}, [initialData]);
+
+	console.log("initial data =>", name);
 
 	return (
 		<Box component="form" onSubmit={handleSubmit}>
@@ -110,11 +125,10 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 				label="Product Name"
 				type="text"
 				fullWidth
-				autoComplete="false"
 				variant="standard"
 				value={name}
 				error={createError?.name || editError?.name}
-				helperText={createError?.name || createError?.name}
+				helperText={createError?.name || editError?.name}
 				onChange={(e) => setName(e.target.value)}
 			/>
 			<Box display="flex" justifyContent="space-between">
@@ -133,6 +147,7 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 						label="Category"
 						onChange={(e) => setCategory(e.target.value)}
 					>
+						<MenuItem value="0">Select Category</MenuItem>
 						{categories?.map((cat) => (
 							<MenuItem key={cat.id} value={cat.id}>
 								{cat.name}
@@ -166,10 +181,11 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 					variant="standard"
 					value={quantity}
 					error={createError?.quantity || editError?.quantity}
-					helperText={createError?.quantity || createError?.quantity}
+					helperText={createError?.quantity || editError?.quantity}
 					onChange={(e) => setQuantity(e.target.value)}
 				/>
 			</Box>
+
 			<FormControlLabel
 				control={
 					<Checkbox defaultChecked={initialData?.is_active || true} />

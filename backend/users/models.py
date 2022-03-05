@@ -7,7 +7,10 @@ from django.contrib.auth.models import (
 from .managers import CustomUserManager
 
 
-Roles = (("admin", "admin"), ("creator", "creator"), ("sale", "sale"))
+Roles = (
+    ("salesman", "salesman"),
+    ("manager", "manager"),
+)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
