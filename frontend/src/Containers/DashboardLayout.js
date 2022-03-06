@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -12,16 +12,15 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { Outlet } from "react-router-dom";
 import MenuList from "../components/Dashboard/MenuList";
+
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../redux/actions/userActions";
 
 const drawerWidth = 240;
 
@@ -95,6 +94,12 @@ const DashboardLayout = () => {
 	const [open, setOpen] = React.useState(true);
 	const [anchorEl, setAnchorEl] = React.useState(null);
 
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo, loading } = userLogin;
+
 	const handleDrawerOpen = () => {
 		setOpen(true);
 	};
@@ -110,6 +115,13 @@ const DashboardLayout = () => {
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
+	useEffect(() => {
+		console.log("from layout");
+		if (!userInfo || !userInfo?.access) {
+			navigate("/login");
+		}
+	}, [userInfo, navigate]);
 
 	return (
 		<Box sx={{ display: "flex" }}>
@@ -162,8 +174,8 @@ const DashboardLayout = () => {
 							onClose={handleClose}
 						>
 							<MenuItem onClick={handleClose}>Profile</MenuItem>
-							<MenuItem onClick={handleClose}>
-								My account
+							<MenuItem onClick={() => dispatch(logout())}>
+								Logout
 							</MenuItem>
 						</Menu>
 					</div>

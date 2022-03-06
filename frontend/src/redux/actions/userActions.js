@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+	USER_LOGOUT,
 	USER_LOGIN_REQUEST,
 	USER_LOGIN_SUCCESS,
 	USER_LOGIN_FAIL,
@@ -26,8 +27,14 @@ import {
 } from "../constants/userConstants";
 import { loginUrl, usersUrl } from "../../utils/urls";
 
+export const logout = () => (dispatch) => {
+	localStorage.removeItem("userInfo_inventory");
+	dispatch({ type: USER_LOGOUT });
+	dispatch({ type: USER_DETAIL_RESET });
+	dispatch({ type: USER_LIST_RESET });
+};
+
 export const login = (credential) => async (dispatch) => {
-	console.log("trigerred =>>");
 	try {
 		dispatch({ type: USER_LOGIN_REQUEST });
 

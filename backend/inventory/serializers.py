@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from users.serializers import UserSerializer
 
-from .models import Category, Product, Shop, Order, OrderItem
+from .models import Category, Product, Customer, Order, OrderItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -28,9 +28,9 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
 
-class ShopSerializer(serializers.ModelSerializer):
+class CustomerSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Shop
+        model = Customer
         fields = "__all__"
         read_only_fields = ["id"]
 
@@ -42,7 +42,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    shop = ShopSerializer()
+    Customer = CustomerSerializer()
     created_by = UserSerializer()
     order_items = serializers.SerializerMethodField(read_only=True)
 

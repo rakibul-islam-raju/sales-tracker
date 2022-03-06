@@ -1,4 +1,3 @@
-from unicodedata import category
 from django.db import models
 
 from utils.models import BaseModel
@@ -37,11 +36,13 @@ class Product(BaseModel):
         return self.quantity * self.price
 
 
-class Shop(BaseModel):
+class Customer(BaseModel):
     created_by = models.ForeignKey(
-        CustomUser, null=True, related_name="shops", on_delete=models.SET_NULL
+        CustomUser, null=True, related_name="customers", on_delete=models.SET_NULL
     )
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=50)
+    phone = models.PositiveBigIntegerField()
+    email = models.EmailField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,8 +55,8 @@ class Shop(BaseModel):
 
 class Order(models.Model):
     created_by = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL)
-    shop = models.ForeignKey(
-        Shop, related_name="orders", null=True, on_delete=models.SET_NULL
+    customer = models.ForeignKey(
+        Customer, related_name="orders", null=True, on_delete=models.SET_NULL
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -64,7 +65,7 @@ class Order(models.Model):
         ordering = ("-created_at",)
 
     def __str__(self):
-        return self.shop.name
+        return self.customer.name
 
 
 class OrderItem(models.Model):
