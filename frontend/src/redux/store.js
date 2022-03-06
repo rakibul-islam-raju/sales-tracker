@@ -22,6 +22,12 @@ import {
 	categoryEditReducer,
 	categoryDeleteReducer,
 } from "./redurers/categoryReducers";
+import {
+	customerListReducer,
+	customerCreateReducer,
+	customerEditReducer,
+	customerDeleteReducer,
+} from "./redurers/customerReducer";
 
 // Combine reducers
 const reducer = combineReducers({
@@ -42,6 +48,11 @@ const reducer = combineReducers({
 	categoryCreate: categoryCreateReducer,
 	categoryEdit: categoryEditReducer,
 	categoryDelete: categoryDeleteReducer,
+	// customers
+	customerList: customerListReducer,
+	customerCreate: customerCreateReducer,
+	customerEdit: customerEditReducer,
+	customerDelete: customerDeleteReducer,
 });
 
 // get userInfo from local storage

@@ -6,37 +6,39 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	CATEGORY_CREATE_RESET,
-	CATEGORY_EDIT_RESET,
-} from "../../../redux/constants/categoryConstants";
+	CUSTOMER_CREATE_RESET,
+	CUSTOMER_EDIT_RESET,
+} from "../../../redux/constants/customerConstants";
 import {
-	listCategories,
-	createCategories,
-	editCategories,
-} from "../../../redux/actions/categoryActions";
+	listCustomers,
+	createCustomers,
+	editCustomers,
+} from "../../../redux/actions/customerActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
 
-const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
+const CustomerCreateForm = ({ setOpen, editCustomer: initialData }) => {
 	const [name, setName] = useState("");
+	const [phone, setPhone] = useState("");
+	const [email, setEmail] = useState("");
 
 	const dispatch = useDispatch();
 
-	// category create state
-	const categoryCreate = useSelector((state) => state.categoryCreate);
+	// customer create state
+	const customerCreate = useSelector((state) => state.customerCreate);
 	const {
 		loading: createLoading,
 		error: createError,
 		success: createSuccess,
-	} = categoryCreate;
+	} = customerCreate;
 
-	// category edit state
-	const categoryEdit = useSelector((state) => state.categoryEdit);
+	// customer edit state
+	const customerEdit = useSelector((state) => state.customerEdit);
 	const {
 		loading: editLoading,
 		error: editError,
 		success: editSuccess,
-	} = categoryEdit;
+	} = customerEdit;
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -44,22 +46,22 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 		const data = new FormData(e.currentTarget);
 
 		if (!initialData) {
-			dispatch(createCategories(data));
+			dispatch(createCustomers(data));
 		} else {
-			dispatch(editCategories(initialData.id, data));
+			dispatch(editCustomers(initialData.id, data));
 		}
 	};
 
 	useEffect(() => {
 		if (createSuccess) {
 			setOpen(false);
-			dispatch({ type: CATEGORY_CREATE_RESET });
-			dispatch(listCategories());
+			dispatch({ type: CUSTOMER_CREATE_RESET });
+			dispatch(listCustomers());
 		}
 		if (editSuccess) {
 			setOpen(false);
-			dispatch({ type: CATEGORY_EDIT_RESET });
-			dispatch(listCategories());
+			dispatch({ type: CUSTOMER_EDIT_RESET });
+			dispatch(listCustomers());
 		}
 
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -67,10 +69,15 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 
 	// set initial value
 	useEffect(() => {
+		// setProductData(initialData);
 		if (initialData) {
 			setName(initialData.name);
+			setPhone(initialData.phone);
+			setEmail(initialData.email);
 		} else {
 			setName("");
+			setPhone("");
+			setEmail("");
 		}
 	}, [initialData]);
 
@@ -89,7 +96,7 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 				margin="dense"
 				id="name"
 				name="name"
-				label="Category Name"
+				label="Full Name"
 				type="text"
 				fullWidth
 				required
@@ -99,6 +106,37 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 				error={createError?.name || editError?.name}
 				helperText={createError?.name || editError?.name}
 				onChange={(e) => setName(e.target.value)}
+			/>
+			<TextField
+				autoFocus
+				margin="dense"
+				id="phone"
+				name="phone"
+				label="Phone Number"
+				type="tel"
+				fullWidth
+				required
+				autoComplete="false"
+				variant="standard"
+				value={phone}
+				error={createError?.phone || editError?.phone}
+				helperText={createError?.phone || editError?.phone}
+				onChange={(e) => setPhone(e.target.value)}
+			/>
+			<TextField
+				autoFocus
+				margin="dense"
+				id="email"
+				name="email"
+				label="Email Address"
+				type="email"
+				fullWidth
+				autoComplete="email"
+				variant="standard"
+				value={email}
+				error={createError?.email || editError?.email}
+				helperText={createError?.email || editError?.email}
+				onChange={(e) => setEmail(e.target.value)}
 			/>
 
 			<FormControlLabel
@@ -116,4 +154,4 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 	);
 };
 
-export default CategoryCreateForm;
+export default CustomerCreateForm;

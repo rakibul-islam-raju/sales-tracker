@@ -116,12 +116,11 @@ const DashboardLayout = () => {
 		setAnchorEl(null);
 	};
 
-	useEffect(() => {
-		console.log("from layout");
-		if (!userInfo || !userInfo?.access) {
-			navigate("/login");
-		}
-	}, [userInfo, navigate]);
+	// useEffect(() => {
+	// 	if (!userInfo || !userInfo?.access) {
+	// 		navigate("/login");
+	// 	}
+	// }, [userInfo, navigate]);
 
 	return (
 		<Box sx={{ display: "flex" }}>

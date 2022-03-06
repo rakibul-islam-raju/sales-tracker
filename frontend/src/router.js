@@ -1,8 +1,15 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DashboardLayout from "./Containers/DashboardLayout";
 import PrivateRoute from "./Containers/PrivateRoute";
-import { Login, Dashboard, Products, Categories, Shops, Users } from "./pages";
-import PageNotFound from "./pages/PageNotFound";
+import {
+	Login,
+	Dashboard,
+	Products,
+	Categories,
+	Customers,
+	Users,
+	PageNotFound,
+} from "./pages";
 
 const router = () => {
 	return (
@@ -22,7 +29,7 @@ const router = () => {
 					<Route index element={<Dashboard />} />
 					<Route path="/products" element={<Products />} />
 					<Route path="/categories" element={<Categories />} />
-					<Route path="/shops" element={<Shops />} />
+					<Route path="/customers" element={<Customers />} />
 					<Route path="/users" element={<Users />} />
 				</Route>
 			</Routes>

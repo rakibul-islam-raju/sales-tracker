@@ -72,5 +72,5 @@ class CustomerListCreateView(generics.ListCreateAPIView):
 
 class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomerSerializer
-    queryset = Product.objects.filter(is_active=True)
+    queryset = Customer.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]

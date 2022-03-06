@@ -10,6 +10,7 @@ const mainMenus = [
 	{ title: "Dashboard", path: "/", icon: <DashboardIcon /> },
 	{ title: "Products", path: "/products", icon: <AllInboxIcon /> },
 	{ title: "Categories", path: "/categories", icon: <CategoryIcon /> },
+	{ title: "Customers", path: "/customers", icon: <PeopleAltIcon /> },
 	{ title: "Users", path: "/users", icon: <PeopleAltIcon /> },
 ];
 
