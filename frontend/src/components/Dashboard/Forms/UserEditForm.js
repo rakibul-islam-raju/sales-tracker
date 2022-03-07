@@ -12,48 +12,56 @@ import {
 	Select,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { USER_CREATE_RESET } from "../../../redux/constants/userConstants";
-import { listUsers, createUsers } from "../../../redux/actions/userActions";
+import { USER_EDIT_RESET } from "../../../redux/constants/userConstants";
+import { listUsers, editUsers } from "../../../redux/actions/userActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
 
-const UserCreateForm = ({ setOpen }) => {
+const UserEditForm = ({ setOpen, editUser: initialData }) => {
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
 	const [role, setRole] = useState("");
-	const [password, setPassword] = useState("");
 
 	const dispatch = useDispatch();
 
-	// user create state
-	const userCreate = useSelector((state) => state.userCreate);
+	// user edit state
+	const userEdit = useSelector((state) => state.userEdit);
 	const {
-		loading: createLoading,
-		error: createError,
-		success: createSuccess,
-	} = userCreate;
+		loading: editLoading,
+		error: editError,
+		success: editSuccess,
+	} = userEdit;
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
 		const data = new FormData(e.currentTarget);
-		dispatch(createUsers(data));
+		dispatch(editUsers(initialData.id, data));
 	};
 
 	useEffect(() => {
-		if (createSuccess) {
+		if (editSuccess) {
 			setOpen(false);
-			dispatch({ type: USER_CREATE_RESET });
+			dispatch({ type: USER_EDIT_RESET });
 			dispatch(listUsers());
 		}
-	}, [createSuccess, dispatch, setOpen]);
+	}, [editSuccess, dispatch, setOpen]);
+
+	// set initial value
+	useEffect(() => {
+		// setProductData(initialData);
+		if (initialData) {
+			setFullname(initialData.fullname);
+			setEmail(initialData.email);
+			setRole(initialData.role);
+		}
+	}, [initialData]);
 
 	return (
 		<Box component="form" onSubmit={handleSubmit}>
-			{createLoading && <Spinner />}
-
-			{createError && typeof createError !== "object" && (
-				<Messages type="error" text={createError} />
+			{editLoading && <Spinner />}
+			{editError && typeof editError !== "object" && (
+				<Messages type="error" text={editError} />
 			)}
 
 			<TextField
@@ -68,8 +76,8 @@ const UserCreateForm = ({ setOpen }) => {
 				autoComplete="false"
 				variant="standard"
 				value={fullname}
-				error={createError?.name}
-				helperText={createError?.name}
+				error={editError?.name}
+				helperText={editError?.name}
 				onChange={(e) => setFullname(e.target.value)}
 			/>
 
@@ -84,8 +92,8 @@ const UserCreateForm = ({ setOpen }) => {
 				autoComplete="email"
 				variant="standard"
 				value={email}
-				error={createError?.email}
-				helperText={createError?.email}
+				error={editError?.email}
+				helperText={editError?.email}
 				onChange={(e) => setEmail(e.target.value)}
 			/>
 
@@ -93,7 +101,7 @@ const UserCreateForm = ({ setOpen }) => {
 				variant="standard"
 				fullWidth
 				margin="dense"
-				error={createError?.role}
+				error={editError?.role}
 			>
 				<InputLabel id="role">Role</InputLabel>
 				<Select
@@ -110,27 +118,13 @@ const UserCreateForm = ({ setOpen }) => {
 						</MenuItem>
 					))}
 				</Select>
-				<FormHelperText>{createError?.role[0]}</FormHelperText>
+				<FormHelperText>{editError?.role[0]}</FormHelperText>
 			</FormControl>
 
-			<TextField
-				margin="dense"
-				id="password"
-				name="password"
-				label="Password"
-				type="password"
-				fullWidth
-				required
-				autoComplete="email"
-				variant="standard"
-				value={password}
-				error={createError?.password}
-				helperText={createError?.password}
-				onChange={(e) => setPassword(e.target.value)}
-			/>
-
 			<FormControlLabel
-				control={<Checkbox defaultChecked />}
+				control={
+					<Checkbox defaultChecked={initialData?.is_active || true} />
+				}
 				name="is_active"
 				label="Active"
 			/>
@@ -142,4 +136,4 @@ const UserCreateForm = ({ setOpen }) => {
 	);
 };
 
-export default UserCreateForm;
+export default UserEditForm;

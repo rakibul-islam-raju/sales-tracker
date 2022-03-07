@@ -32,7 +32,7 @@ const Products = () => {
 			<FormModal
 				open={open}
 				handleClose={handleClose}
-				title="Create New Product"
+				title={editProduct ? "Edit Product" : "Create New Product"}
 				formElement={
 					<ProductCreateForm
 						editProduct={editProduct}

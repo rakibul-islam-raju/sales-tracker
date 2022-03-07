@@ -5,10 +5,15 @@ import AddIcon from "@mui/icons-material/Add";
 import FormModal from "../components/FormModal";
 import UserTable from "../components/Dashboard/tables/UserTable";
 import UserCreateForm from "../components/Dashboard/Forms/UserCreateForm";
+import { useSelector } from "react-redux";
+import UserEditForm from "../components/Dashboard/Forms/UserEditForm";
 
 const Categories = () => {
 	const [open, setOpen] = React.useState(false);
 	const [editUser, setEditUser] = React.useState(null);
+
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo } = userLogin;
 
 	// modal close handler
 	const handleClose = () => {
@@ -32,17 +37,23 @@ const Categories = () => {
 			<FormModal
 				open={open}
 				handleClose={handleClose}
-				title="Create New User"
+				title={editUser ? "Edit User" : "Create New User"}
 				formElement={
-					<UserCreateForm editUser={editUser} setOpen={setOpen} />
+					editUser ? (
+						<UserEditForm editUser={editUser} setOpen={setOpen} />
+					) : (
+						<UserCreateForm setOpen={setOpen} />
+					)
 				}
 			/>
 
-			{/* <Box mb={4} display="flex" justifyContent="flex-end">
-				<Button variant="contained" onClick={handleUserCreate}>
-					<AddIcon /> New User
-				</Button>
-			</Box> */}
+			{userInfo?.is_staff && (
+				<Box mb={4} display="flex" justifyContent="flex-end">
+					<Button variant="contained" onClick={handleUserCreate}>
+						<AddIcon /> New User
+					</Button>
+				</Box>
+			)}
 
 			<UserTable handleCategoryEdit={handleUserEdit} />
 		</>

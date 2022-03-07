@@ -5,6 +5,11 @@ body {
 
 a {
 	text-decoration: none;
+	color: #616161;
+
+	:visited {
+		color: #616161;
+	}
 }
 
 img.notFound {

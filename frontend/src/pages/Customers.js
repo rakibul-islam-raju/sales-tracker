@@ -32,7 +32,7 @@ const Customers = () => {
 			<FormModal
 				open={open}
 				handleClose={handleClose}
-				title="Create New Customer"
+				title={editCustomer ? "Edit Customer" : "Create New Customer"}
 				formElement={
 					<CustomerCreateForm
 						editCustomer={editCustomer}

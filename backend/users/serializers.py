@@ -36,14 +36,6 @@ class LoginSerializer(serializers.ModelSerializer):
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    def create(self, validated_data):
-        user = CustomUser.objects.create_user(
-            fullname=validated_data["fullname"],
-            email=validated_data["email"],
-            password=validated_data["password"],
-        )
-        return user
-
     class Meta:
         model = CustomUser
         fields = [
@@ -59,7 +51,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = (
             "id",
-            "role",
             "is_active",
             "is_staff",
             "is_superuser",
@@ -68,6 +59,15 @@ class UserCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "password": {"write_only": True},
         }
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create_user(
+            fullname=validated_data["fullname"],
+            email=validated_data["email"],
+            role=validated_data["role"],
+            password=validated_data["password"],
+        )
+        return user
 
 
 class UserSerializer(serializers.ModelSerializer):

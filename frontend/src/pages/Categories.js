@@ -32,7 +32,7 @@ const Categories = () => {
 			<FormModal
 				open={open}
 				handleClose={handleClose}
-				title="Create New Category"
+				title={editCategory ? "Edit Category" : "Create New Category"}
 				formElement={
 					<CategoryCreateForm
 						editCategory={editCategory}
