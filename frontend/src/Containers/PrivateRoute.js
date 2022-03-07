@@ -7,7 +7,7 @@ const PrivateRoute = ({ children }) => {
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
 
-	return userInfo?.access ? (
+	return userInfo?.email ? (
 		children
 	) : (
 		<Navigate to="/login" replace state={{ from: location.pathname }} />

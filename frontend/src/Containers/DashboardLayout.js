@@ -117,7 +117,7 @@ const DashboardLayout = () => {
 	};
 
 	// useEffect(() => {
-	// 	if (!userInfo || !userInfo?.access) {
+	// 	if (!userInfo || !userInfo?.email) {
 	// 		navigate("/login");
 	// 	}
 	// }, [userInfo, navigate]);

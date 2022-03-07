@@ -4,6 +4,9 @@ import {
 	USER_LOGIN_REQUEST,
 	USER_LOGIN_SUCCESS,
 	USER_LOGIN_FAIL,
+	USER_TOKEN_UPDATE_REQUEST,
+	USER_TOKEN_UPDATE_SUCCESS,
+	USER_TOKEN_UPDATE_FAIL,
 	USER_LIST_REQUEST,
 	USER_LIST_SUCCESS,
 	USER_LIST_FAIL,
@@ -25,13 +28,57 @@ import {
 	USER_DETAIL_FAIL,
 	USER_DETAIL_RESET,
 } from "../constants/userConstants";
-import { loginUrl, usersUrl } from "../../utils/urls";
+import jwt_decode from "jwt-decode";
+import { loginUrl, usersUrl, tokenRefreshUrl } from "../../utils/urls";
 
 export const logout = () => (dispatch) => {
 	localStorage.removeItem("userInfo_inventory");
 	dispatch({ type: USER_LOGOUT });
 	dispatch({ type: USER_DETAIL_RESET });
 	dispatch({ type: USER_LIST_RESET });
+};
+
+export const tokenUpdate = () => async (dispatch, getState) => {
+	try {
+		const {
+			userLogin: { userInfo },
+		} = getState();
+
+		const config = {
+			headers: {
+				"Content-type": "application/json",
+			},
+		};
+
+		const { data } = await axios.post(
+			tokenRefreshUrl,
+			{ refresh: userInfo.refresh },
+			config
+		);
+
+		const userData = {
+			...jwt_decode(data.access),
+			access: data.access,
+			refresh: data.refresh,
+		};
+
+		dispatch({
+			type: USER_LOGIN_SUCCESS,
+			payload: userData,
+		});
+
+		// save userInfo in local storage
+		localStorage.setItem("userInfo_inventory", JSON.stringify(data));
+	} catch (error) {
+		logout();
+		// dispatch({
+		// 	type: USER_LOGIN_FAIL,
+		// 	payload:
+		// 		error.response && error.response.data
+		// 			? error.response.data
+		// 			: error.message,
+		// });
+	}
 };
 
 export const login = (credential) => async (dispatch) => {
@@ -46,10 +93,19 @@ export const login = (credential) => async (dispatch) => {
 
 		const { data } = await axios.post(loginUrl, credential, config);
 
-		dispatch({ type: USER_LOGIN_SUCCESS, payload: data.detail });
+		const userData = {
+			...jwt_decode(data.access),
+			access: data.access,
+			refresh: data.refresh,
+		};
+
+		dispatch({
+			type: USER_LOGIN_SUCCESS,
+			payload: userData,
+		});
 
 		// save userInfo in local storage
-		localStorage.setItem("userInfo_inventory", JSON.stringify(data.detail));
+		localStorage.setItem("userInfo_inventory", JSON.stringify(data));
 	} catch (error) {
 		dispatch({
 			type: USER_LOGIN_FAIL,

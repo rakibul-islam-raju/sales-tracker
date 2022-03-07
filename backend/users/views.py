@@ -9,14 +9,20 @@ from rest_framework.permissions import (
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import CustomUser
 from .serializers import (
+    MyTokenObtainPairSerializer,
     UserCreateSerializer,
     LoginSerializer,
     UserSerializer,
     ChangePasswordSerializer,
 )
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 
 class LoginView(APIView):

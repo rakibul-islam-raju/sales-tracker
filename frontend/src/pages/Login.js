@@ -32,7 +32,7 @@ const Login = () => {
 	};
 
 	useEffect(() => {
-		if (userInfo?.access) {
+		if (userInfo?.email) {
 			navigate("/");
 		}
 	}, [navigate, userInfo]);

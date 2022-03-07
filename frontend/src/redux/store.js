@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
 import { composeWithDevTools } from "redux-devtools-extension";
+import jwt_decode from "jwt-decode";
 
 import {
 	userLoginReducer,
@@ -56,12 +57,23 @@ const reducer = combineReducers({
 });
 
 // get userInfo from local storage
-const userInfoFromStorage = localStorage.getItem("userInfo_inventory")
+console.log("from store =>");
+
+const getTokenFromLocalStorage = localStorage.getItem("userInfo_inventory")
 	? JSON.parse(localStorage.getItem("userInfo_inventory"))
 	: null;
 
+let userData;
+if (getTokenFromLocalStorage) {
+	userData = {
+		...jwt_decode(getTokenFromLocalStorage.access),
+		access: getTokenFromLocalStorage.access,
+		refresh: getTokenFromLocalStorage.refresh,
+	};
+}
+
 const initialState = {
-	userLogin: { userInfo: userInfoFromStorage },
+	userLogin: { userInfo: userData },
 };
 
 // redux-thund middleware
