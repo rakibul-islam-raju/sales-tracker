@@ -23,7 +23,20 @@ import {
 	USER_DETAIL_SUCCESS,
 	USER_DETAIL_FAIL,
 	USER_DETAIL_RESET,
+	USER_AUTH_TOKEN_SUCCESS,
+	USER_AUTH_TOKEN_RESET,
 } from "../constants/userConstants";
+
+export const userTokenReducer = (state = {}, action) => {
+	switch (action.type) {
+		case USER_AUTH_TOKEN_SUCCESS:
+			return { authTokens: action.payload };
+		case USER_AUTH_TOKEN_RESET:
+			return {};
+		default:
+			return state;
+	}
+};
 
 export const userLoginReducer = (state = {}, action) => {
 	switch (action.type) {

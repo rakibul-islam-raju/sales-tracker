@@ -10,6 +10,7 @@ import {
 	userEditReducer,
 	userDeleteReducer,
 	userDetailReducer,
+	userTokenReducer,
 } from "./redurers/userReduces";
 import {
 	productListReducer,
@@ -34,6 +35,7 @@ import {
 const reducer = combineReducers({
 	// users
 	userLogin: userLoginReducer,
+	userToken: userTokenReducer,
 	userList: userListReducer,
 	userCreate: userCreateReducer,
 	userEdit: userEditReducer,
@@ -57,8 +59,6 @@ const reducer = combineReducers({
 });
 
 // get userInfo from local storage
-console.log("from store =>");
-
 const getTokenFromLocalStorage = localStorage.getItem("userInfo_inventory")
 	? JSON.parse(localStorage.getItem("userInfo_inventory"))
 	: null;
@@ -67,13 +67,12 @@ let userData;
 if (getTokenFromLocalStorage) {
 	userData = {
 		...jwt_decode(getTokenFromLocalStorage.access),
-		access: getTokenFromLocalStorage.access,
-		refresh: getTokenFromLocalStorage.refresh,
 	};
 }
 
 const initialState = {
 	userLogin: { userInfo: userData },
+	userToken: { userTokens: getTokenFromLocalStorage },
 };
 
 // redux-thund middleware

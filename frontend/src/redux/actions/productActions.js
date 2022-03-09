@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
 	PRODUCT_LIST_REQUEST,
 	PRODUCT_LIST_SUCCESS,
@@ -14,24 +13,12 @@ import {
 	PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants";
 import { productsUrl } from "../../utils/urls";
+import axiosInstance from "../../utils/axiosInstance";
 
-export const listProducts = () => async (dispatch, getState) => {
+export const listProducts = () => async (dispatch) => {
 	try {
 		dispatch({ type: PRODUCT_LIST_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.get(productsUrl, config);
-
+		const { data } = await axiosInstance.get(productsUrl);
 		dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -47,20 +34,7 @@ export const listProducts = () => async (dispatch, getState) => {
 export const createProducts = (productData) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: PRODUCT_CREATE_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.post(productsUrl, productData, config);
-
+		const { data } = await axiosInstance.post(productsUrl, productData);
 		dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -76,24 +50,10 @@ export const createProducts = (productData) => async (dispatch, getState) => {
 export const editProducts = (id, productData) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: PRODUCT_EDIT_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.patch(
+		const { data } = await axiosInstance.patch(
 			productsUrl + id + "/",
-			productData,
-			config
+			productData
 		);
-
 		dispatch({ type: PRODUCT_EDIT_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -109,20 +69,7 @@ export const editProducts = (id, productData) => async (dispatch, getState) => {
 export const deleteProducts = (id) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: PRODUCT_DELETE_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.delete(productsUrl + id + "/", config);
-
+		const { data } = await axiosInstance.delete(productsUrl + id + "/");
 		dispatch({ type: PRODUCT_DELETE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({

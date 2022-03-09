@@ -9,18 +9,18 @@ const App = () => {
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
 
-	useEffect(() => {
-		console.log("useEffect =>");
-		const cleanUp = setInterval(() => {
-			if (userInfo.refresh) {
-				console.log("useEffect 22 =>");
-				dispatch(tokenUpdate());
-			}
-			// }, 2000);
-		}, 600000);
-		// cleanUp setInverval
-		return () => clearInterval(cleanUp);
-	}, [dispatch, userInfo]);
+	// useEffect(() => {
+	// 	console.log("useEffect =>");
+	// 	const cleanUp = setInterval(() => {
+	// 		if (userInfo.refresh) {
+	// 			console.log("useEffect 22 =>");
+	// 			dispatch(tokenUpdate());
+	// 		}
+	// 		// }, 2000);
+	// 	}, 600000);
+	// 	// cleanUp setInverval
+	// 	return () => clearInterval(cleanUp);
+	// }, [dispatch, userInfo]);
 
 	return (
 		<>

@@ -102,8 +102,6 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 		}
 	}, [initialData]);
 
-	console.log("initial data =>", name);
-
 	return (
 		<Box component="form" onSubmit={handleSubmit}>
 			{(createLoading || editLoading || categoryLoading) && <Spinner />}
