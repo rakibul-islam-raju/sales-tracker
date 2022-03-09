@@ -30,7 +30,7 @@ import {
 export const userTokenReducer = (state = {}, action) => {
 	switch (action.type) {
 		case USER_AUTH_TOKEN_SUCCESS:
-			return { authTokens: action.payload };
+			return { tokens: action.payload };
 		case USER_AUTH_TOKEN_RESET:
 			return {};
 		default:

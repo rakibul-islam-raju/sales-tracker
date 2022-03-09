@@ -72,7 +72,7 @@ if (getTokenFromLocalStorage) {
 
 const initialState = {
 	userLogin: { userInfo: userData },
-	userToken: { userTokens: getTokenFromLocalStorage },
+	userToken: { tokens: getTokenFromLocalStorage },
 };
 
 // redux-thund middleware

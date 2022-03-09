@@ -13,12 +13,12 @@ import {
 	PRODUCT_DELETE_FAIL,
 } from "../constants/productConstants";
 import { productsUrl } from "../../utils/urls";
-import axiosInstance from "../../utils/axiosInstance";
+import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
 export const listProducts = () => async (dispatch) => {
 	try {
 		dispatch({ type: PRODUCT_LIST_REQUEST });
-		const { data } = await axiosInstance.get(productsUrl);
+		const { data } = await axiosPrivateInstance.get(productsUrl);
 		dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -34,7 +34,10 @@ export const listProducts = () => async (dispatch) => {
 export const createProducts = (productData) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: PRODUCT_CREATE_REQUEST });
-		const { data } = await axiosInstance.post(productsUrl, productData);
+		const { data } = await axiosPrivateInstance.post(
+			productsUrl,
+			productData
+		);
 		dispatch({ type: PRODUCT_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -50,7 +53,7 @@ export const createProducts = (productData) => async (dispatch, getState) => {
 export const editProducts = (id, productData) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: PRODUCT_EDIT_REQUEST });
-		const { data } = await axiosInstance.patch(
+		const { data } = await axiosPrivateInstance.patch(
 			productsUrl + id + "/",
 			productData
 		);
@@ -69,7 +72,9 @@ export const editProducts = (id, productData) => async (dispatch, getState) => {
 export const deleteProducts = (id) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: PRODUCT_DELETE_REQUEST });
-		const { data } = await axiosInstance.delete(productsUrl + id + "/");
+		const { data } = await axiosPrivateInstance.delete(
+			productsUrl + id + "/"
+		);
 		dispatch({ type: PRODUCT_DELETE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({

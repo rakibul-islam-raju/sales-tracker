@@ -35,16 +35,10 @@ export const logout = () => (dispatch) => {
 };
 
 export const tokenUpdate = (data) => async (dispatch) => {
-	console.log("data =>", data);
 	try {
-		const tokens = {
-			access: data.access,
-			refresh: data.refresh,
-		};
-
 		dispatch({
 			type: USER_AUTH_TOKEN_SUCCESS,
-			payload: tokens,
+			payload: data,
 		});
 
 		// save userInfo in local storage

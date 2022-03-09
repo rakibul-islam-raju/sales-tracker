@@ -13,12 +13,12 @@ import {
 	CATEGORY_DELETE_FAIL,
 } from "../constants/categoryConstants";
 import { categoryUrl } from "../../utils/urls";
-import axiosInstance from "../../utils/axiosInstance";
+import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
 export const listCategories = () => async (dispatch) => {
 	try {
 		dispatch({ type: CATEGORY_LIST_REQUEST });
-		const { data } = await axiosInstance.get(categoryUrl);
+		const { data } = await axiosPrivateInstance.get(categoryUrl);
 		dispatch({ type: CATEGORY_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -34,7 +34,10 @@ export const listCategories = () => async (dispatch) => {
 export const createCategories = (categoryData) => async (dispatch) => {
 	try {
 		dispatch({ type: CATEGORY_CREATE_REQUEST });
-		const { data } = await axiosInstance.post(categoryUrl, categoryData);
+		const { data } = await axiosPrivateInstance.post(
+			categoryUrl,
+			categoryData
+		);
 		dispatch({ type: CATEGORY_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -50,7 +53,7 @@ export const createCategories = (categoryData) => async (dispatch) => {
 export const editCategories = (id, categoryData) => async (dispatch) => {
 	try {
 		dispatch({ type: CATEGORY_EDIT_REQUEST });
-		const { data } = await axiosInstance.patch(
+		const { data } = await axiosPrivateInstance.patch(
 			categoryUrl + id + "/",
 			categoryData
 		);
@@ -69,7 +72,9 @@ export const editCategories = (id, categoryData) => async (dispatch) => {
 export const deleteCategories = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: CATEGORY_DELETE_REQUEST });
-		const { data } = await axiosInstance.delete(categoryUrl + id + "/");
+		const { data } = await axiosPrivateInstance.delete(
+			categoryUrl + id + "/"
+		);
 		dispatch({ type: CATEGORY_DELETE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
