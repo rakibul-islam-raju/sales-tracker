@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
 	USER_LOGOUT,
 	USER_LOGIN_REQUEST,
@@ -26,10 +25,15 @@ import {
 } from "../constants/userConstants";
 import jwt_decode from "jwt-decode";
 import { loginUrl, usersUrl } from "../../utils/urls";
+import {
+	axiosPrivateInstance,
+	axiosPublicInstance,
+} from "../../utils/axiosInstance";
 
 export const logout = () => (dispatch) => {
 	localStorage.removeItem("userInfo_inventory");
 	dispatch({ type: USER_LOGOUT });
+	dispatch({ type: USER_AUTH_TOKEN_RESET });
 	dispatch({ type: USER_DETAIL_RESET });
 	dispatch({ type: USER_LIST_RESET });
 };
@@ -53,7 +57,7 @@ export const login = (credential) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_LOGIN_REQUEST });
 
-		const { data } = await axios.post(loginUrl, credential);
+		const { data } = await axiosPublicInstance.post(loginUrl, credential);
 
 		const userData = {
 			...jwt_decode(data.access),
@@ -63,11 +67,6 @@ export const login = (credential) => async (dispatch) => {
 			type: USER_LOGIN_SUCCESS,
 			payload: userData,
 		});
-
-		// const tokens = {
-		// 	access: data.access,
-		// 	refresh: data.refresh,
-		// };
 
 		dispatch({
 			type: USER_AUTH_TOKEN_SUCCESS,
@@ -87,23 +86,10 @@ export const login = (credential) => async (dispatch) => {
 	}
 };
 
-export const listUsers = () => async (dispatch, getState) => {
+export const listUsers = () => async (dispatch) => {
 	try {
 		dispatch({ type: USER_LIST_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.get(usersUrl, config);
-
+		const { data } = await axiosPrivateInstance.get(usersUrl);
 		dispatch({ type: USER_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -116,23 +102,10 @@ export const listUsers = () => async (dispatch, getState) => {
 	}
 };
 
-export const createUsers = (userData) => async (dispatch, getState) => {
+export const createUsers = (userData) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_CREATE_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.post(usersUrl, userData, config);
-
+		const { data } = await axiosPrivateInstance.post(usersUrl, userData);
 		dispatch({ type: USER_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -145,27 +118,13 @@ export const createUsers = (userData) => async (dispatch, getState) => {
 	}
 };
 
-export const editUsers = (id, userData) => async (dispatch, getState) => {
+export const editUsers = (id, userData) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_EDIT_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.patch(
+		const { data } = await axiosPrivateInstance.patch(
 			usersUrl + id + "/",
-			userData,
-			config
+			userData
 		);
-
 		dispatch({ type: USER_EDIT_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -178,23 +137,10 @@ export const editUsers = (id, userData) => async (dispatch, getState) => {
 	}
 };
 
-export const deleteUsers = (id) => async (dispatch, getState) => {
+export const deleteUsers = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_DELETE_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.delete(usersUrl + id + "/", config);
-
+		const { data } = await axiosPrivateInstance.delete(usersUrl + id + "/");
 		dispatch({ type: USER_DELETE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -207,23 +153,10 @@ export const deleteUsers = (id) => async (dispatch, getState) => {
 	}
 };
 
-export const detailUsers = (id) => async (dispatch, getState) => {
+export const detailUsers = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_DETAIL_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.delete(usersUrl + id + "/", config);
-
+		const { data } = await axiosPrivateInstance.delete(usersUrl + id + "/");
 		dispatch({ type: USER_DETAIL_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({

@@ -35,12 +35,13 @@ axiosPrivateInstance.interceptors.request.use(
 			const { data } = await axios.post(tokenRefreshUrl, {
 				refresh: userData?.refresh,
 			});
-			store.dispatch(tokenUpdate(data));
+			await store.dispatch(tokenUpdate(data));
 
 			req.headers.Authorization = `Bearer ${data?.access}`;
+		} else {
+			store.dispatch(logout());
 		}
 
-		store.dispatch(logout());
 		return req;
 	},
 	(error) => {

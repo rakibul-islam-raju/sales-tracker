@@ -14,24 +14,12 @@ import {
 	CUSTOMER_DELETE_FAIL,
 } from "../constants/customerConstants";
 import { customerUrl } from "../../utils/urls";
+import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
-export const listCustomers = () => async (dispatch, getState) => {
+export const listCustomers = () => async (dispatch) => {
 	try {
 		dispatch({ type: CUSTOMER_LIST_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.get(customerUrl, config);
-
+		const { data } = await axiosPrivateInstance.get(customerUrl);
 		dispatch({ type: CUSTOMER_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -44,23 +32,10 @@ export const listCustomers = () => async (dispatch, getState) => {
 	}
 };
 
-export const createCustomers = (customerData) => async (dispatch, getState) => {
+export const createCustomers = (customerData) => async (dispatch) => {
 	try {
 		dispatch({ type: CUSTOMER_CREATE_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.post(customerUrl, customerData, config);
-
+		const { data } = await axios.post(customerUrl, customerData);
 		dispatch({ type: CUSTOMER_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -73,57 +48,29 @@ export const createCustomers = (customerData) => async (dispatch, getState) => {
 	}
 };
 
-export const editCustomers =
-	(id, customerData) => async (dispatch, getState) => {
-		try {
-			dispatch({ type: CUSTOMER_EDIT_REQUEST });
+export const editCustomers = (id, customerData) => async (dispatch) => {
+	try {
+		dispatch({ type: CUSTOMER_EDIT_REQUEST });
+		const { data } = await axiosPrivateInstance.patch(
+			customerUrl + id + "/",
+			customerData
+		);
+		dispatch({ type: CUSTOMER_EDIT_SUCCESS, payload: data });
+	} catch (error) {
+		dispatch({
+			type: CUSTOMER_EDIT_FAIL,
+			payload:
+				error.response && error.response.data
+					? error.response.data
+					: error.message,
+		});
+	}
+};
 
-			const {
-				userLogin: { userInfo },
-			} = getState();
-
-			const config = {
-				headers: {
-					"Content-type": "application/json",
-					Authorization: `Bearer ${userInfo.access}`,
-				},
-			};
-
-			const { data } = await axios.patch(
-				customerUrl + id + "/",
-				customerData,
-				config
-			);
-
-			dispatch({ type: CUSTOMER_EDIT_SUCCESS, payload: data });
-		} catch (error) {
-			dispatch({
-				type: CUSTOMER_EDIT_FAIL,
-				payload:
-					error.response && error.response.data
-						? error.response.data
-						: error.message,
-			});
-		}
-	};
-
-export const deleteCustomers = (id) => async (dispatch, getState) => {
+export const deleteCustomers = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: CUSTOMER_DELETE_REQUEST });
-
-		const {
-			userLogin: { userInfo },
-		} = getState();
-
-		const config = {
-			headers: {
-				"Content-type": "application/json",
-				Authorization: `Bearer ${userInfo.access}`,
-			},
-		};
-
-		const { data } = await axios.delete(customerUrl + id + "/", config);
-
+		const { data } = await axios.delete(customerUrl + id + "/");
 		dispatch({ type: CUSTOMER_DELETE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
