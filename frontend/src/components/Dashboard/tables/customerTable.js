@@ -112,7 +112,7 @@ const CustomerTable = ({ handleCustomerEdit }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{customers?.map((row) => (
+					{customers?.results?.map((row) => (
 						<TableRow
 							key={row.id}
 							sx={{

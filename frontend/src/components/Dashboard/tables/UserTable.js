@@ -121,7 +121,7 @@ const UserTable = ({ handleCategoryEdit }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{users?.map((row) => (
+					{users?.results?.map((row) => (
 						<TableRow
 							key={row.id}
 							sx={{

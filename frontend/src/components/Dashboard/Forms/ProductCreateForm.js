@@ -33,6 +33,8 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 
 	const dispatch = useDispatch();
 
+	console.log("product create form");
+
 	// product create state
 	const productCreate = useSelector((state) => state.productCreate);
 	const {
@@ -146,7 +148,7 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 						onChange={(e) => setCategory(e.target.value)}
 					>
 						<MenuItem value="0">Select Category</MenuItem>
-						{categories?.map((cat) => (
+						{categories?.results?.map((cat) => (
 							<MenuItem key={cat.id} value={cat.id}>
 								{cat.name}
 							</MenuItem>
@@ -199,4 +201,4 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 	);
 };
 
-export default ProductCreateForm;
+export default React.memo(ProductCreateForm);

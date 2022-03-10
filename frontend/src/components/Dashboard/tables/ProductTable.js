@@ -22,6 +22,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import Messages from "../../../components/Messages";
 import Spinner from "../../../components/Spinner";
 import ConfirmModal from "../../ConfirmModal";
+import Pagination from "../Pagination";
 
 const ProductTable = ({ handleProductEdit }) => {
 	const dispatch = useDispatch();
@@ -29,6 +30,30 @@ const ProductTable = ({ handleProductEdit }) => {
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 	const [deleteVal, setDeleteVal] = useState(false);
 	const [currentID, setCurrentID] = useState(null);
+
+	// paginate state
+	const [page, setPage] = useState(1);
+	const [rowsPerPage, setRowsPerPage] = useState(2);
+
+	// page change handler
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage);
+
+		const pageCount = page + newPage;
+		const params = `page=${pageCount}`;
+
+		console.log("page =>", page);
+		console.log("newPage =>", newPage);
+		console.log("page count =>", pageCount);
+		dispatch(listProducts(params));
+	};
+
+	// row per page change handler
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value));
+		// setPage(0);
+		console.log("row change");
+	};
 
 	// product list state
 	const productList = useSelector((state) => state.productList);
@@ -114,7 +139,7 @@ const ProductTable = ({ handleProductEdit }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{products?.map((row) => (
+					{products?.results?.map((row) => (
 						<TableRow
 							key={row.id}
 							sx={{
@@ -152,8 +177,18 @@ const ProductTable = ({ handleProductEdit }) => {
 					))}
 				</TableBody>
 			</Table>
+
+			<Pagination
+				count={products?.count}
+				page={page}
+				rowsPerPageOptions={[2, 3]}
+				rowsPerPage={rowsPerPage}
+				setPage={setPage}
+				handleChangePage={handleChangePage}
+				handleChangeRowsPerPage={handleChangeRowsPerPage}
+			/>
 		</TableContainer>
 	);
 };
 
-export default ProductTable;
+export default React.memo(ProductTable);

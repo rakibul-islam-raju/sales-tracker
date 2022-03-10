@@ -27,6 +27,8 @@ const Products = () => {
 		setOpen(true);
 	};
 
+	console.log("product page");
+
 	return (
 		<>
 			<FormModal

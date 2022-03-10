@@ -112,7 +112,7 @@ const CategoryTable = ({ handleCategoryEdit }) => {
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{categories?.map((row) => (
+					{categories?.results?.map((row) => (
 						<TableRow
 							key={row.id}
 							sx={{
