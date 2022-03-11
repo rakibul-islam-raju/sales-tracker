@@ -11,6 +11,16 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["id"]
 
+    def validate_name(self, value):
+        # check if category already exists with this name
+        review_instance = Category.objects.filter(
+            name__icontains=value,
+        ).exists()
+        if review_instance:
+            raise serializers.ValidationError("Category already exists.")
+
+        return value
+
 
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
@@ -26,6 +36,16 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         model = Product
         fields = "__all__"
         read_only_fields = ["id"]
+
+    def validate_name(self, value):
+        # check if product already exists with this name
+        review_instance = Product.objects.filter(
+            name__icontains=value,
+        ).exists()
+        if review_instance:
+            raise serializers.ValidationError("Product already exists.")
+
+        return value
 
 
 class CustomerSerializer(serializers.ModelSerializer):

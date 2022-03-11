@@ -110,8 +110,13 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 			{editError && typeof editError !== "object" && (
 				<Messages type="error" text={editError} />
 			)}
-			{createError && typeof createError !== "object" && (
+			{createError && typeof createError !== "object" ? (
 				<Messages type="error" text={createError} />
+			) : (
+				createError?.non_field_errors &&
+				createError?.non_field_errors.map((err) => (
+					<Messages type="error" text={err} />
+				))
 			)}
 			{categoryError && typeof categoryError !== "object" && (
 				<Messages type="error" text={categoryError} />
@@ -155,7 +160,8 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 						))}
 					</Select>
 					<FormHelperText>
-						{createError?.category[0] || editError?.category[0]}
+						{(createError?.category && createError?.category[0]) ||
+							(editError?.category && editError?.category[0])}
 					</FormHelperText>
 				</FormControl>
 				<TextField

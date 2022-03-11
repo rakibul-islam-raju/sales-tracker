@@ -1,4 +1,3 @@
-import axios from "axios";
 import {
 	CUSTOMER_LIST_REQUEST,
 	CUSTOMER_LIST_SUCCESS,
@@ -36,7 +35,10 @@ export const listCustomers = (params) => async (dispatch) => {
 export const createCustomers = (customerData) => async (dispatch) => {
 	try {
 		dispatch({ type: CUSTOMER_CREATE_REQUEST });
-		const { data } = await axios.post(customerUrl, customerData);
+		const { data } = await axiosPrivateInstance.post(
+			customerUrl,
+			customerData
+		);
 		dispatch({ type: CUSTOMER_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -71,7 +73,9 @@ export const editCustomers = (id, customerData) => async (dispatch) => {
 export const deleteCustomers = (id) => async (dispatch) => {
 	try {
 		dispatch({ type: CUSTOMER_DELETE_REQUEST });
-		const { data } = await axios.delete(customerUrl + id + "/");
+		const { data } = await axiosPrivateInstance.delete(
+			customerUrl + id + "/"
+		);
 		dispatch({ type: CUSTOMER_DELETE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({

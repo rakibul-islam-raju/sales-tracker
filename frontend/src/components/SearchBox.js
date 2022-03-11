@@ -8,7 +8,6 @@ const SearchBox = ({ handleSearch, searchVal, setSearchVal }) => {
 	return (
 		<Box component="form" onSubmit={handleSearch} sx={{ display: "flex" }}>
 			<TextField
-				autoFocus
 				id="search"
 				name="search"
 				label="Search"
