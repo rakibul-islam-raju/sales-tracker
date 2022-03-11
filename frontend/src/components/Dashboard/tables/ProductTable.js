@@ -37,14 +37,8 @@ const ProductTable = ({ handleProductEdit }) => {
 
 	// page change handler
 	const handleChangePage = (event, newPage) => {
-		setPage(newPage);
-
-		const pageCount = page + newPage;
-		const params = `page=${pageCount}`;
-
-		console.log("page =>", page);
-		console.log("newPage =>", newPage);
-		console.log("page count =>", pageCount);
+		setPage(newPage + 1);
+		const params = `page=${newPage + 1}`;
 		dispatch(listProducts(params));
 	};
 
@@ -52,7 +46,6 @@ const ProductTable = ({ handleProductEdit }) => {
 	const handleChangeRowsPerPage = (event) => {
 		setRowsPerPage(parseInt(event.target.value));
 		// setPage(0);
-		console.log("row change");
 	};
 
 	// product list state
@@ -180,12 +173,12 @@ const ProductTable = ({ handleProductEdit }) => {
 
 			<Pagination
 				count={products?.count}
-				page={page}
+				page={page - 1}
 				rowsPerPageOptions={[2, 3]}
 				rowsPerPage={rowsPerPage}
 				setPage={setPage}
 				handleChangePage={handleChangePage}
-				handleChangeRowsPerPage={handleChangeRowsPerPage}
+				// handleChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
 		</TableContainer>
 	);

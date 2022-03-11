@@ -17,7 +17,7 @@ const Pagination = ({
 			onPageChange={handleChangePage}
 			rowsPerPageOptions={rowsPerPageOptions}
 			rowsPerPage={rowsPerPage}
-			onRowsPerPageChange={handleChangeRowsPerPage}
+			// onRowsPerPageChange={handleChangeRowsPerPage}
 		/>
 	);
 };

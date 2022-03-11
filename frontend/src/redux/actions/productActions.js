@@ -18,9 +18,8 @@ import { axiosPrivateInstance } from "../../utils/axiosInstance";
 export const listProducts = (params) => async (dispatch) => {
 	try {
 		dispatch({ type: PRODUCT_LIST_REQUEST });
-		const { data } = await axiosPrivateInstance.get(
-			productsUrl + "?" + params
-		);
+		const url = params ? productsUrl + "?" + params : productsUrl;
+		const { data } = await axiosPrivateInstance.get(url);
 		dispatch({ type: PRODUCT_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
