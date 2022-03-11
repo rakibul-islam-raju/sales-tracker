@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ProductTable from "../components/Dashboard/tables/ProductTable";
 import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
 import FormModal from "../components/FormModal";
+import SearchBox from "../components/SearchBox";
 
 const Products = () => {
 	const [open, setOpen] = React.useState(false);
@@ -27,8 +28,6 @@ const Products = () => {
 		setOpen(true);
 	};
 
-	console.log("product page");
-
 	return (
 		<>
 			<FormModal
@@ -43,7 +42,13 @@ const Products = () => {
 				}
 			/>
 
-			<Box mb={4} display="flex" justifyContent="flex-end">
+			<Box
+				mb={4}
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<SearchBox />
 				<Button variant="contained" onClick={handleProductCreate}>
 					<AddIcon /> New Product
 				</Button>

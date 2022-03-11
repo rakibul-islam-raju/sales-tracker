@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FormModal from "../components/FormModal";
 import CategoryTable from "../components/Dashboard/tables/CategoryTable";
 import CategoryCreateForm from "../components/Dashboard/Forms/CategoryCreateForm";
+import SearchBox from "../components/SearchBox";
 
 const Categories = () => {
 	const [open, setOpen] = React.useState(false);
@@ -41,7 +42,13 @@ const Categories = () => {
 				}
 			/>
 
-			<Box mb={4} display="flex" justifyContent="flex-end">
+			<Box
+				mb={4}
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<SearchBox />
 				<Button variant="contained" onClick={handleCategoryCreate}>
 					<AddIcon /> New Category
 				</Button>

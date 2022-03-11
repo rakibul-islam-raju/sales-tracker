@@ -7,6 +7,7 @@ import UserTable from "../components/Dashboard/tables/UserTable";
 import UserCreateForm from "../components/Dashboard/Forms/UserCreateForm";
 import { useSelector } from "react-redux";
 import UserEditForm from "../components/Dashboard/Forms/UserEditForm";
+import SearchBox from "../components/SearchBox";
 
 const Categories = () => {
 	const [open, setOpen] = React.useState(false);
@@ -47,13 +48,19 @@ const Categories = () => {
 				}
 			/>
 
-			{userInfo?.is_staff && (
-				<Box mb={4} display="flex" justifyContent="flex-end">
+			<Box
+				mb={4}
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<SearchBox />
+				{userInfo?.is_staff && (
 					<Button variant="contained" onClick={handleUserCreate}>
 						<AddIcon /> New User
 					</Button>
-				</Box>
-			)}
+				)}
+			</Box>
 
 			<UserTable handleCategoryEdit={handleUserEdit} />
 		</>

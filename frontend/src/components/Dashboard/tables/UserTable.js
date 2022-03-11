@@ -22,6 +22,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import Messages from "../../../components/Messages";
 import Spinner from "../../../components/Spinner";
 import ConfirmModal from "../../ConfirmModal";
+import Pagination from "../Pagination";
 
 const UserTable = ({ handleCategoryEdit }) => {
 	const dispatch = useDispatch();
@@ -29,6 +30,23 @@ const UserTable = ({ handleCategoryEdit }) => {
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 	const [deleteVal, setDeleteVal] = useState(false);
 	const [currentID, setCurrentID] = useState(null);
+
+	// pagination state
+	const [page, setPage] = useState(1);
+	const [rowsPerPage, setRowsPerPage] = useState(2);
+
+	// page change handler
+	const handleChangePage = (event, newPage) => {
+		setPage(newPage + 1);
+		const params = `page=${newPage + 1}`;
+		dispatch(listUsers(params));
+	};
+
+	// row per page change handler
+	const handleChangeRowsPerPage = (event) => {
+		setRowsPerPage(parseInt(event.target.value));
+		// setPage(0);
+	};
 
 	// user login state
 	const userLogin = useSelector((state) => state.userLogin);
@@ -195,6 +213,16 @@ const UserTable = ({ handleCategoryEdit }) => {
 					))}
 				</TableBody>
 			</Table>
+
+			<Pagination
+				count={users?.count}
+				page={page - 1}
+				rowsPerPageOptions={[2, 3]}
+				rowsPerPage={rowsPerPage}
+				setPage={setPage}
+				handleChangePage={handleChangePage}
+				// handleChangeRowsPerPage={handleChangeRowsPerPage}
+			/>
 		</TableContainer>
 	);
 };

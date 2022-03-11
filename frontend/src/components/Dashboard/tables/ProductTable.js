@@ -31,7 +31,7 @@ const ProductTable = ({ handleProductEdit }) => {
 	const [deleteVal, setDeleteVal] = useState(false);
 	const [currentID, setCurrentID] = useState(null);
 
-	// paginate state
+	// pagination state
 	const [page, setPage] = useState(1);
 	const [rowsPerPage, setRowsPerPage] = useState(2);
 

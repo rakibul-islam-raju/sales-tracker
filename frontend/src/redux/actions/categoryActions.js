@@ -15,10 +15,11 @@ import {
 import { categoryUrl } from "../../utils/urls";
 import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
-export const listCategories = () => async (dispatch) => {
+export const listCategories = (params) => async (dispatch) => {
 	try {
 		dispatch({ type: CATEGORY_LIST_REQUEST });
-		const { data } = await axiosPrivateInstance.get(categoryUrl);
+		const url = params ? categoryUrl + "?" + params : categoryUrl;
+		const { data } = await axiosPrivateInstance.get(url);
 		dispatch({ type: CATEGORY_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({

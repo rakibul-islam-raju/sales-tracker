@@ -86,10 +86,11 @@ export const login = (credential) => async (dispatch) => {
 	}
 };
 
-export const listUsers = () => async (dispatch) => {
+export const listUsers = (params) => async (dispatch) => {
 	try {
 		dispatch({ type: USER_LIST_REQUEST });
-		const { data } = await axiosPrivateInstance.get(usersUrl);
+		const url = params ? usersUrl + "?" + params : usersUrl;
+		const { data } = await axiosPrivateInstance.get(url);
 		dispatch({ type: USER_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({

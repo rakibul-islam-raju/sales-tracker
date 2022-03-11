@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FormModal from "../components/FormModal";
 import CustomerTable from "../components/Dashboard/tables/customerTable";
 import CustomerCreateForm from "../components/Dashboard/Forms/CustomerCreateForm";
+import SearchBox from "../components/SearchBox";
 
 const Customers = () => {
 	const [open, setOpen] = React.useState(false);
@@ -41,7 +42,13 @@ const Customers = () => {
 				}
 			/>
 
-			<Box mb={4} display="flex" justifyContent="flex-end">
+			<Box
+				mb={4}
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<SearchBox />
 				<Button variant="contained" onClick={handleCustomerCreate}>
 					<AddIcon /> New Customer
 				</Button>

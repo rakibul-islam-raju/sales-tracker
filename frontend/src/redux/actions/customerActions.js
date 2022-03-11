@@ -16,10 +16,11 @@ import {
 import { customerUrl } from "../../utils/urls";
 import { axiosPrivateInstance } from "../../utils/axiosInstance";
 
-export const listCustomers = () => async (dispatch) => {
+export const listCustomers = (params) => async (dispatch) => {
 	try {
 		dispatch({ type: CUSTOMER_LIST_REQUEST });
-		const { data } = await axiosPrivateInstance.get(customerUrl);
+		const url = params ? customerUrl + "?" + params : customerUrl;
+		const { data } = await axiosPrivateInstance.get(url);
 		dispatch({ type: CUSTOMER_LIST_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
