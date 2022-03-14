@@ -41,7 +41,7 @@ class Customer(BaseModel):
         CustomUser, null=True, related_name="customers", on_delete=models.SET_NULL
     )
     name = models.CharField(max_length=50)
-    phone = models.PositiveBigIntegerField(unique=True)
+    phone = models.CharField(max_length=11, unique=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

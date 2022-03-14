@@ -7,16 +7,9 @@ from django.contrib.auth.models import (
 from .managers import CustomUserManager
 
 
-Roles = (
-    ("salesman", "salesman"),
-    ("manager", "manager"),
-)
-
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     fullname = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
-    role = models.CharField(max_length=8, choices=Roles, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_staff = models.BooleanField(default=False)

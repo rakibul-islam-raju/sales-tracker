@@ -13,7 +13,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token["email"] = user.email
         token["fullname"] = user.fullname
-        token["role"] = user.role
         token["is_staff"] = user.is_staff
         token["is_superuser"] = user.is_superuser
 
@@ -30,14 +29,13 @@ class LoginSerializer(serializers.ModelSerializer):
         fields = [
             "email",
             "fullname",
-            "role",
             "is_staff",
             "is_superuser",
             "password",
             "access",
             "refresh",
         ]
-        read_only_fields = ("fullname", "role", "is_staff", "is_superuser")
+        read_only_fields = ("fullname", "is_staff", "is_superuser")
         extra_kwargs = {
             "password": {"write_only": True},
         }
@@ -58,7 +56,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "id",
             "fullname",
             "email",
-            "role",
             "is_active",
             "is_staff",
             "is_superuser",
@@ -80,7 +77,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
         user = CustomUser.objects.create_user(
             fullname=validated_data["fullname"],
             email=validated_data["email"],
-            role=validated_data["role"],
             password=validated_data["password"],
         )
         return user

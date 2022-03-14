@@ -9,6 +9,8 @@ from rest_framework.permissions import (
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
+from rest_framework import filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import CustomUser
@@ -54,6 +56,13 @@ class LoginView(APIView):
 class UserListCreateView(generics.ListCreateAPIView):
     serializer_class = UserCreateSerializer
     queryset = CustomUser.objects.all()
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+        DjangoFilterBackend,
+    ]
+    filterset_fields = ["is_active", "is_staff", "is_superuser"]
+    search_fields = ["fullname", "=email"]
 
     def get_permissions(self):
         if self.request.method == "POST":
