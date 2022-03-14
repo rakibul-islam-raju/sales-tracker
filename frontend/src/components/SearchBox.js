@@ -14,12 +14,12 @@ const SearchBox = ({ handleSearch, searchVal, setSearchVal }) => {
 				type="text"
 				size="small"
 				value={searchVal}
-				onChange={setSearchVal}
+				onChange={(e) => setSearchVal(e.target.value)}
 				autoComplete="false"
 				variant="outlined"
 				sx={{ width: "250px" }}
 			/>
-			<Button variant="contained">
+			<Button type="submit" variant="contained">
 				<SearchIcon />
 			</Button>
 		</Box>

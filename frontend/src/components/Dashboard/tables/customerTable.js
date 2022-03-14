@@ -140,9 +140,7 @@ const CustomerTable = ({ handleCustomerEdit }) => {
 							}}
 						>
 							<TableCell>{row.name}</TableCell>
-							<TableCell align="right">
-								+880 {row.phone}
-							</TableCell>
+							<TableCell align="right">{row.phone}</TableCell>
 							<TableCell align="right">{row.email}</TableCell>
 							<TableCell align="right">
 								<ButtonGroup>

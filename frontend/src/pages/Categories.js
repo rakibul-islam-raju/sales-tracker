@@ -6,10 +6,15 @@ import FormModal from "../components/FormModal";
 import CategoryTable from "../components/Dashboard/tables/CategoryTable";
 import CategoryCreateForm from "../components/Dashboard/Forms/CategoryCreateForm";
 import SearchBox from "../components/SearchBox";
+import { listCategories } from "../redux/actions/categoryActions";
+import { useDispatch } from "react-redux";
 
 const Categories = () => {
 	const [open, setOpen] = React.useState(false);
 	const [editCategory, setEditCategory] = React.useState(null);
+	const [searchVal, setSearchVal] = React.useState("");
+
+	const dispatch = useDispatch();
 
 	// modal close handler
 	const handleClose = () => {
@@ -26,6 +31,14 @@ const Categories = () => {
 	const handleCategoryEdit = (product) => {
 		setEditCategory(product);
 		setOpen(true);
+	};
+
+	// search handler
+	const handleSearch = (e) => {
+		e.preventDefault();
+
+		const params = `search=${searchVal}`;
+		dispatch(listCategories(params));
 	};
 
 	return (
@@ -48,7 +61,11 @@ const Categories = () => {
 				justifyContent="space-between"
 				alignItems="center"
 			>
-				<SearchBox />
+				<SearchBox
+					handleSearch={handleSearch}
+					searchVal={searchVal}
+					setSearchVal={setSearchVal}
+				/>
 				<Button variant="contained" onClick={handleCategoryCreate}>
 					<AddIcon /> New Category
 				</Button>

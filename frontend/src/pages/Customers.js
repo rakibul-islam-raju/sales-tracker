@@ -1,4 +1,6 @@
 import React from "react";
+import { listCustomers } from "../redux/actions/customerActions";
+import { useDispatch } from "react-redux";
 import Button from "@mui/material/Button";
 import Box from "@mui/system/Box";
 import AddIcon from "@mui/icons-material/Add";
@@ -10,6 +12,9 @@ import SearchBox from "../components/SearchBox";
 const Customers = () => {
 	const [open, setOpen] = React.useState(false);
 	const [editCustomer, setEditCustomer] = React.useState(null);
+	const [searchVal, setSearchVal] = React.useState("");
+
+	const dispatch = useDispatch();
 
 	// modal close handler
 	const handleClose = () => {
@@ -26,6 +31,14 @@ const Customers = () => {
 	const handleCustomerEdit = (customer) => {
 		setEditCustomer(customer);
 		setOpen(true);
+	};
+
+	// search handler
+	const handleSearch = (e) => {
+		e.preventDefault();
+
+		const params = `search=${searchVal}`;
+		dispatch(listCustomers(params));
 	};
 
 	return (
@@ -48,7 +61,11 @@ const Customers = () => {
 				justifyContent="space-between"
 				alignItems="center"
 			>
-				<SearchBox />
+				<SearchBox
+					handleSearch={handleSearch}
+					searchVal={searchVal}
+					setSearchVal={setSearchVal}
+				/>
 				<Button variant="contained" onClick={handleCustomerCreate}>
 					<AddIcon /> New Customer
 				</Button>

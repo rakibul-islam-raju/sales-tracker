@@ -20,7 +20,6 @@ import Messages from "../../Messages";
 const UserCreateForm = ({ setOpen }) => {
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
-	const [role, setRole] = useState("");
 	const [password, setPassword] = useState("");
 
 	const dispatch = useDispatch();
@@ -88,30 +87,6 @@ const UserCreateForm = ({ setOpen }) => {
 				helperText={createError?.email}
 				onChange={(e) => setEmail(e.target.value)}
 			/>
-
-			<FormControl
-				variant="standard"
-				fullWidth
-				margin="dense"
-				error={createError?.role}
-			>
-				<InputLabel id="role">Role</InputLabel>
-				<Select
-					labelId="role"
-					id="role"
-					name="role"
-					value={role}
-					label="role"
-					onChange={(e) => setRole(e.target.value)}
-				>
-					{["salesman", "manager"]?.map((item) => (
-						<MenuItem key={item} value={item}>
-							{item}
-						</MenuItem>
-					))}
-				</Select>
-				<FormHelperText>{createError?.role[0]}</FormHelperText>
-			</FormControl>
 
 			<TextField
 				margin="dense"

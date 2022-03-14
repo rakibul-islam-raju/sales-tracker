@@ -50,7 +50,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
         DjangoFilterBackend,
     ]
     filterset_fields = ["category", "is_active"]
-    search_fields = ["name"]
+    search_fields = ["name", "category__name"]
     ordering_fields = ["price", "quantity"]
 
     def perform_create(self, serializer):
@@ -79,7 +79,7 @@ class CustomerListCreateView(generics.ListCreateAPIView):
     queryset = Customer.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ["name", "=phone", "=email"]
+    search_fields = ["name", "phone", "email"]
     filterset_fields = ["is_active"]
 
     def perform_create(self, serializer):

@@ -24,7 +24,7 @@ import Spinner from "../../../components/Spinner";
 import ConfirmModal from "../../ConfirmModal";
 import Pagination from "../Pagination";
 
-const ProductTable = ({ handleProductEdit }) => {
+const ProductTable = ({ handleProductEdit, searchVal }) => {
 	const dispatch = useDispatch();
 
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -38,7 +38,9 @@ const ProductTable = ({ handleProductEdit }) => {
 	// page change handler
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage + 1);
-		const params = `page=${newPage + 1}`;
+		let params = searchVal
+			? `page=${newPage + 1}&search=${searchVal}`
+			: `page=${newPage + 1}`;
 		dispatch(listProducts(params));
 	};
 
@@ -47,6 +49,10 @@ const ProductTable = ({ handleProductEdit }) => {
 		setRowsPerPage(parseInt(event.target.value));
 		// setPage(0);
 	};
+
+	// useState state
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo } = userLogin;
 
 	// product list state
 	const productList = useSelector((state) => state.productList);
@@ -81,7 +87,7 @@ const ProductTable = ({ handleProductEdit }) => {
 	};
 
 	useEffect(() => {
-		if (!products || products.length === 0) {
+		if (!products) {
 			dispatch(listProducts());
 		}
 

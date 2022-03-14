@@ -27,7 +27,6 @@ const Login = () => {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const data = new FormData(e.currentTarget);
-
 		dispatch(login(data));
 	};
 

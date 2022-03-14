@@ -1,6 +1,8 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { listProducts } from "../redux/actions/productActions";
 import Button from "@mui/material/Button";
-import { Box } from "@mui/system";
+import Box from "@mui/material/Box";
 import AddIcon from "@mui/icons-material/Add";
 import ProductTable from "../components/Dashboard/tables/ProductTable";
 import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
@@ -10,6 +12,9 @@ import SearchBox from "../components/SearchBox";
 const Products = () => {
 	const [open, setOpen] = React.useState(false);
 	const [editProduct, setEditProduct] = React.useState(null);
+	const [searchVal, setSearchVal] = React.useState("");
+
+	const dispatch = useDispatch();
 
 	// modal close handler
 	const handleClose = () => {
@@ -26,6 +31,14 @@ const Products = () => {
 	const handleProductEdit = (product) => {
 		setEditProduct(product);
 		setOpen(true);
+	};
+
+	// product search handler
+	const handleSearch = (e) => {
+		e.preventDefault();
+
+		const params = `search=${searchVal}`;
+		dispatch(listProducts(params));
 	};
 
 	return (
@@ -48,13 +61,20 @@ const Products = () => {
 				justifyContent="space-between"
 				alignItems="center"
 			>
-				<SearchBox />
+				<SearchBox
+					searchVal={searchVal}
+					setSearchVal={setSearchVal}
+					handleSearch={handleSearch}
+				/>
 				<Button variant="contained" onClick={handleProductCreate}>
 					<AddIcon /> New Product
 				</Button>
 			</Box>
 
-			<ProductTable handleProductEdit={handleProductEdit} />
+			<ProductTable
+				handleProductEdit={handleProductEdit}
+				searchVal={searchVal}
+			/>
 		</>
 	);
 };

@@ -14,7 +14,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
-import Badge from "@mui/material/Badge";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -129,9 +128,8 @@ const UserTable = ({ handleCategoryEdit }) => {
 					<TableRow>
 						<TableCell>Full Name</TableCell>
 						<TableCell align="right">Email</TableCell>
-						<TableCell align="right">Role</TableCell>
 						<TableCell align="right">Active</TableCell>
-						<TableCell align="right">Admin</TableCell>
+						<TableCell align="right">Staff</TableCell>
 						<TableCell align="right">Super Admin</TableCell>
 						{userInfo.is_staff && (
 							<TableCell align="right">Actions</TableCell>
@@ -150,18 +148,6 @@ const UserTable = ({ handleCategoryEdit }) => {
 						>
 							<TableCell>{row.fullname}</TableCell>
 							<TableCell align="right">{row.email}</TableCell>
-							<TableCell align="right">
-								{row.role && (
-									<Badge
-										color={
-											row.role === "manager"
-												? "primary"
-												: "secondary"
-										}
-										badgeContent={row.role}
-									></Badge>
-								)}
-							</TableCell>
 							<TableCell align="right">
 								{row.is_active ? (
 									<CheckCircleIcon color="success" />

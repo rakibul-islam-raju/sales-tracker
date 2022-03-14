@@ -20,7 +20,6 @@ import Messages from "../../Messages";
 const UserEditForm = ({ setOpen, editUser: initialData }) => {
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
-	const [role, setRole] = useState("");
 
 	const dispatch = useDispatch();
 
@@ -53,7 +52,6 @@ const UserEditForm = ({ setOpen, editUser: initialData }) => {
 		if (initialData) {
 			setFullname(initialData.fullname);
 			setEmail(initialData.email);
-			setRole(initialData.role);
 		}
 	}, [initialData]);
 
@@ -96,31 +94,6 @@ const UserEditForm = ({ setOpen, editUser: initialData }) => {
 				helperText={editError?.email}
 				onChange={(e) => setEmail(e.target.value)}
 			/>
-
-			<FormControl
-				variant="standard"
-				fullWidth
-				margin="dense"
-				error={editError?.role}
-			>
-				<InputLabel id="role">Role</InputLabel>
-				<Select
-					labelId="role"
-					id="role"
-					name="role"
-					value={role}
-					label="role"
-					onChange={(e) => setRole(e.target.value)}
-				>
-					{["salesman", "manager"]?.map((item) => (
-						<MenuItem key={item} value={item}>
-							{item}
-						</MenuItem>
-					))}
-				</Select>
-				<FormHelperText>{editError?.role[0]}</FormHelperText>
-			</FormControl>
-
 			<FormControlLabel
 				control={
 					<Checkbox defaultChecked={initialData?.is_active || true} />
