@@ -20,6 +20,7 @@ import Messages from "../../Messages";
 const UserEditForm = ({ setOpen, editUser: initialData }) => {
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
+	const [isActive, setIsActive] = useState(true);
 
 	const dispatch = useDispatch();
 
@@ -33,8 +34,8 @@ const UserEditForm = ({ setOpen, editUser: initialData }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		const data = new FormData(e.currentTarget);
+		data.append("is_active", isActive);
 		dispatch(editUsers(initialData.id, data));
 	};
 
@@ -52,6 +53,7 @@ const UserEditForm = ({ setOpen, editUser: initialData }) => {
 		if (initialData) {
 			setFullname(initialData.fullname);
 			setEmail(initialData.email);
+			setIsActive(initialData.is_active);
 		}
 	}, [initialData]);
 
@@ -96,8 +98,12 @@ const UserEditForm = ({ setOpen, editUser: initialData }) => {
 			/>
 			<FormControlLabel
 				control={
-					<Checkbox defaultChecked={initialData?.is_active || true} />
+					<Checkbox
+						defaultChecked={initialData?.is_active}
+						onChange={() => setIsActive(!isActive)}
+					/>
 				}
+				id="is_active"
 				name="is_active"
 				label="Active"
 			/>

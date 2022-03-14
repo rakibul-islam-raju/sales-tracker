@@ -13,6 +13,7 @@ from inventory.models import Category, Product, Customer, Order, OrderItem
 
 from .serializers import (
     CategorySerializer,
+    CategoryCreateSerializer,
     ProductSerializer,
     ProductCreateSerializer,
     CustomerSerializer,
@@ -30,6 +31,12 @@ class CategoryListCreateView(generics.ListCreateAPIView):
     ]
     search_fields = ["name"]
     filterset_fields = ["is_active"]
+
+    def get_serializer_class(self):
+        if self.request.method == "GET":
+            return CategorySerializer
+        else:
+            return CategoryCreateSerializer
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -66,12 +73,7 @@ class ProductListCreateView(generics.ListCreateAPIView):
 class ProductDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Product.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
-
-    def get_serializer_class(self):
-        if self.request.method == "GET":
-            return ProductSerializer
-        else:
-            return ProductCreateSerializer
+    serializer_class = ProductSerializer
 
 
 class CustomerListCreateView(generics.ListCreateAPIView):

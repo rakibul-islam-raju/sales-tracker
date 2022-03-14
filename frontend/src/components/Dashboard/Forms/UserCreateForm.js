@@ -21,6 +21,7 @@ const UserCreateForm = ({ setOpen }) => {
 	const [fullname, setFullname] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [isActive, setIsActive] = useState(true);
 
 	const dispatch = useDispatch();
 
@@ -34,8 +35,8 @@ const UserCreateForm = ({ setOpen }) => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
 		const data = new FormData(e.currentTarget);
+		data.append("is_active", isActive);
 		dispatch(createUsers(data));
 	};
 
@@ -44,6 +45,11 @@ const UserCreateForm = ({ setOpen }) => {
 			setOpen(false);
 			dispatch({ type: USER_CREATE_RESET });
 			dispatch(listUsers());
+
+			setFullname("");
+			setEmail("");
+			setPassword("");
+			setIsActive(true);
 		}
 	}, [createSuccess, dispatch, setOpen]);
 
@@ -105,7 +111,12 @@ const UserCreateForm = ({ setOpen }) => {
 			/>
 
 			<FormControlLabel
-				control={<Checkbox defaultChecked />}
+				control={
+					<Checkbox
+						defaultChecked={isActive}
+						onChange={() => setIsActive(!isActive)}
+					/>
+				}
 				name="is_active"
 				label="Active"
 			/>

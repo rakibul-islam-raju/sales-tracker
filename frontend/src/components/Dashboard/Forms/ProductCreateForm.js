@@ -30,10 +30,9 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 	const [price, setPrice] = useState(0);
 	const [quantity, setQuantity] = useState(0);
 	const [category, setCategory] = useState(0);
+	const [isActive, setIsActive] = useState(true);
 
 	const dispatch = useDispatch();
-
-	console.log("product create form");
 
 	// product create state
 	const productCreate = useSelector((state) => state.productCreate);
@@ -63,6 +62,7 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 		e.preventDefault();
 
 		const data = new FormData(e.currentTarget);
+		data.append("is_active", isActive);
 
 		if (!initialData) {
 			dispatch(createProducts(data));
@@ -96,11 +96,13 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 			setPrice(initialData.price);
 			setQuantity(initialData.quantity);
 			setCategory(initialData.category?.id);
+			setIsActive(initialData.is_active);
 		} else {
 			setName("");
 			setPrice(0);
 			setQuantity(0);
 			setCategory(0);
+			setIsActive(true);
 		}
 	}, [initialData]);
 
@@ -194,7 +196,10 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 
 			<FormControlLabel
 				control={
-					<Checkbox defaultChecked={initialData?.is_active || true} />
+					<Checkbox
+						defaultChecked={initialData?.is_active || isActive}
+						onChange={(e) => setIsActive(!isActive)}
+					/>
 				}
 				name="is_active"
 				label="Active"
@@ -207,4 +212,4 @@ const ProductCreateForm = ({ setOpen, editProduct: initialData }) => {
 	);
 };
 
-export default React.memo(ProductCreateForm);
+export default ProductCreateForm;

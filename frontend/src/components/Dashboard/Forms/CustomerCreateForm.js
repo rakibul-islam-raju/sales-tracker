@@ -21,6 +21,7 @@ const CustomerCreateForm = ({ setOpen, editCustomer: initialData }) => {
 	const [name, setName] = useState("");
 	const [phone, setPhone] = useState("");
 	const [email, setEmail] = useState("");
+	const [isActive, setIsActive] = useState(true);
 
 	const dispatch = useDispatch();
 
@@ -44,7 +45,7 @@ const CustomerCreateForm = ({ setOpen, editCustomer: initialData }) => {
 		e.preventDefault();
 
 		const data = new FormData(e.currentTarget);
-
+		data.append("is_active", isActive);
 		if (!initialData) {
 			dispatch(createCustomers(data));
 		} else {
@@ -74,10 +75,12 @@ const CustomerCreateForm = ({ setOpen, editCustomer: initialData }) => {
 			setName(initialData.name);
 			setPhone(initialData.phone);
 			setEmail(initialData.email);
+			setIsActive(initialData.is_active);
 		} else {
 			setName("");
 			setPhone("");
 			setEmail("");
+			setIsActive(true);
 		}
 	}, [initialData]);
 
@@ -141,7 +144,10 @@ const CustomerCreateForm = ({ setOpen, editCustomer: initialData }) => {
 
 			<FormControlLabel
 				control={
-					<Checkbox defaultChecked={initialData?.is_active || true} />
+					<Checkbox
+						defaultChecked={isActive}
+						onChange={() => setIsActive(!isActive)}
+					/>
 				}
 				name="is_active"
 				label="Active"

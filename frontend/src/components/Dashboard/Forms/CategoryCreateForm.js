@@ -19,6 +19,7 @@ import Messages from "../../Messages";
 
 const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 	const [name, setName] = useState("");
+	const [isActive, setIsActive] = useState(true);
 
 	const dispatch = useDispatch();
 
@@ -42,7 +43,7 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 		e.preventDefault();
 
 		const data = new FormData(e.currentTarget);
-
+		data.append("is_active", isActive);
 		if (!initialData) {
 			dispatch(createCategories(data));
 		} else {
@@ -55,6 +56,8 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 			setOpen(false);
 			dispatch({ type: CATEGORY_CREATE_RESET });
 			dispatch(listCategories());
+			setName("");
+			setIsActive(true);
 		}
 		if (editSuccess) {
 			setOpen(false);
@@ -69,8 +72,10 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 	useEffect(() => {
 		if (initialData) {
 			setName(initialData.name);
+			setIsActive(initialData.is_active);
 		} else {
 			setName("");
+			setIsActive(true);
 		}
 	}, [initialData]);
 
@@ -103,7 +108,10 @@ const CategoryCreateForm = ({ setOpen, editCategory: initialData }) => {
 
 			<FormControlLabel
 				control={
-					<Checkbox defaultChecked={initialData?.is_active || true} />
+					<Checkbox
+						defaultChecked={isActive}
+						onChange={() => setIsActive(!isActive)}
+					/>
 				}
 				name="is_active"
 				label="Active"

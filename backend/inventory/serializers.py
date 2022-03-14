@@ -11,6 +11,13 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["id"]
 
+
+class CategoryCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = "__all__"
+        read_only_fields = ["id"]
+
     def validate_name(self, value):
         # check if category already exists with this name
         review_instance = Category.objects.filter(
