@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "@mui/material/Button";
+import Paper from "@mui/material/Paper";
 import { Box } from "@mui/system";
 import AddIcon from "@mui/icons-material/Add";
 import FormModal from "../components/FormModal";
@@ -8,6 +9,9 @@ import CategoryCreateForm from "../components/Dashboard/Forms/CategoryCreateForm
 import SearchBox from "../components/SearchBox";
 import { listCategories } from "../redux/actions/categoryActions";
 import { useDispatch } from "react-redux";
+import { Autocomplete, Grid, TextField } from "@mui/material";
+import SaleCreateForm from "../components/Dashboard/Forms/SaleCreateForm";
+import SaleProductsTable from "../components/Dashboard/tables/SaleProductsTable";
 
 const Sales = () => {
 	const [open, setOpen] = React.useState(false);
@@ -42,37 +46,17 @@ const Sales = () => {
 	};
 
 	return (
-		<>
-			<FormModal
-				open={open}
-				handleClose={handleClose}
-				title={editCategory ? "Edit Category" : "Create New Category"}
-				formElement={
-					<CategoryCreateForm
-						editCategory={editCategory}
-						setOpen={setOpen}
-					/>
-				}
-			/>
-
-			<Box
-				mb={4}
-				display="flex"
-				justifyContent="space-between"
-				alignItems="center"
-			>
-				<SearchBox
-					handleSearch={handleSearch}
-					searchVal={searchVal}
-					setSearchVal={setSearchVal}
-				/>
-				<Button variant="contained" onClick={handleCategoryCreate}>
-					<AddIcon /> New Category
-				</Button>
-			</Box>
-
-			<CategoryTable handleCategoryEdit={handleCategoryEdit} />
-		</>
+		<Grid container spacing={2} columns={12}>
+			<Grid item md={8}>
+				<SaleCreateForm />
+				{/* <SaleProductsTable /> */}
+			</Grid>
+			<Grid item md={4}>
+				<Paper elevation={1} sx={{ padding: "10px" }}>
+					hellp
+				</Paper>
+			</Grid>
+		</Grid>
 	);
 };
 

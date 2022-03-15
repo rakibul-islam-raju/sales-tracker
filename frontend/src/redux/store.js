@@ -30,6 +30,7 @@ import {
 	customerEditReducer,
 	customerDeleteReducer,
 } from "./redurers/customerReducer";
+import { bucketReducer } from "./redurers/bucketReducers";
 
 // Combine reducers
 const reducer = combineReducers({
@@ -56,6 +57,8 @@ const reducer = combineReducers({
 	customerCreate: customerCreateReducer,
 	customerEdit: customerEditReducer,
 	customerDelete: customerDeleteReducer,
+	// bucket
+	bucket: bucketReducer,
 });
 
 // get userInfo from local storage
