@@ -1,4 +1,5 @@
 from datetime import datetime
+import pdb
 from rest_framework.permissions import (
     AllowAny,
     IsAdminUser,
@@ -7,9 +8,11 @@ from rest_framework.permissions import (
 )
 from rest_framework import generics
 from rest_framework import filters
+from rest_framework.response import Response
+from rest_framework import status
 from django_filters.rest_framework import DjangoFilterBackend
 
-from inventory.models import Category, Product, Customer, Order, OrderItem
+from inventory.models import Category, Product, Customer, Sale, SaleItem
 
 from .serializers import (
     CategorySerializer,
@@ -17,8 +20,9 @@ from .serializers import (
     ProductSerializer,
     ProductCreateSerializer,
     CustomerSerializer,
-    OrderSerializer,
-    OrderItemSerializer,
+    SaleSerializer,
+    SaleItemSerializer,
+    SaleCreateSerializer,
 )
 
 
@@ -92,3 +96,68 @@ class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CustomerSerializer
     queryset = Customer.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
+
+
+class SalesView(generics.ListCreateAPIView):
+    serializer_class = SaleSerializer
+    queryset = Sale.objects.all()
+    permission_classes = [IsAuthenticated]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["customer__name", "customer__phone", "customer__email"]
+
+    def post(self, request, *args, **kwargs):
+        sale_items = request.data.get("sale_items")
+        customer_id = request.data.get("customer_id")
+        customer = request.data.get("customer")
+
+        # validate
+        new_customer = None
+        if customer:
+            customer_serializer = CustomerSerializer(data=customer)
+            customer_serializer.is_valid(raise_exception=True)
+            new_customer = customer_serializer.save(commit=False)
+        elif customer_id:
+            customer = Customer.objects.filter(id=customer_id).first()
+            if not customer:
+                return Response(
+                    {"detail": "Customer not found!"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            return Response(
+                {"customer": "Customer Required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if sale_items and len(sale_items) == 0:
+            return Response(
+                {"detail": "No Order Items!"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        else:
+            if new_customer:
+                customer = new_customer.save()
+            else:
+                customer = customer
+            # validate sale
+            sale_serializer = SaleCreateSerializer(
+                data={
+                    "created_by": request.user.pk,
+                    "customer": customer.pk,
+                }
+            )
+            sale_serializer.is_valid(raise_exception=True)
+            sale = sale_serializer.save()
+
+            # validate sale items
+            items = []
+            for i in sale_items:
+                validate_item = {**i, "sale": sale.pk}
+                items.append(validate_item)
+
+            sale_item_serializer = SaleItemSerializer(data=items, many=True)
+            sale_item_serializer.is_valid(raise_exception=True)
+            sale_item_serializer.save()
+
+            data = self.serializer_class(sale, many=False)
+
+            return Response(data.data)

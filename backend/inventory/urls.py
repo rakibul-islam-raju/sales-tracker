@@ -7,6 +7,7 @@ from .views import (
     ProductDetailView,
     CustomerListCreateView,
     CustomerDetailView,
+    SalesView,
 )
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     path("products/<int:pk>/", ProductDetailView.as_view(), name="product_details"),
     path("customers/", CustomerListCreateView.as_view(), name="customer_list_create"),
     path("customers/<int:pk>/", CustomerDetailView.as_view(), name="customer_details"),
+    path("sales/", SalesView.as_view(), name="sales_list_create"),
 ]

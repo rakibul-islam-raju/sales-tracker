@@ -4,6 +4,7 @@ import PrivateRoute from "./Containers/PrivateRoute";
 import {
 	Login,
 	Dashboard,
+	Sales,
 	Products,
 	Categories,
 	Customers,
@@ -27,6 +28,7 @@ const router = () => {
 					}
 				>
 					<Route index element={<Dashboard />} />
+					<Route path="/sales" element={<Sales />} />
 					<Route path="/products" element={<Products />} />
 					<Route path="/categories" element={<Categories />} />
 					<Route path="/customers" element={<Customers />} />

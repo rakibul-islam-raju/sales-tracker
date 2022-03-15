@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom";
 
 const mainMenus = [
 	{ title: "Dashboard", path: "/", icon: <DashboardIcon /> },
+	{ title: "Sales", path: "/sales", icon: <AllInboxIcon /> },
 	{ title: "Products", path: "/products", icon: <AllInboxIcon /> },
 	{ title: "Categories", path: "/categories", icon: <CategoryIcon /> },
 	{ title: "Customers", path: "/customers", icon: <PeopleAltIcon /> },
@@ -19,9 +20,15 @@ const MenuList = () => {
 		<>
 			<List>
 				{mainMenus.map((menu) => (
-					<NavLink to={menu.path} key={`${menu.title}-menu`}>
-						<ListItem button>
-							<ListItemIcon>{menu.icon}</ListItemIcon>
+					<NavLink
+						className={(nav) => (nav.isActive ? "active" : "")}
+						to={menu.path}
+						key={`${menu.title}-menu`}
+					>
+						<ListItem button className="activeListItem">
+							<ListItemIcon className="activeIcon">
+								{menu.icon}
+							</ListItemIcon>
 							<ListItemText primary={menu.title} />
 						</ListItem>
 					</NavLink>

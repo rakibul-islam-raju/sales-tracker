@@ -53,10 +53,10 @@ class Customer(BaseModel):
         return self.name
 
 
-class Order(models.Model):
+class Sale(models.Model):
     created_by = models.ForeignKey(CustomUser, null=True, on_delete=models.SET_NULL)
     customer = models.ForeignKey(
-        Customer, related_name="orders", null=True, on_delete=models.SET_NULL
+        Customer, related_name="sales", null=True, on_delete=models.SET_NULL
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -68,13 +68,11 @@ class Order(models.Model):
         return self.customer.name
 
 
-class OrderItem(models.Model):
-    order = models.ForeignKey(
-        Order, related_name="order_items", on_delete=models.CASCADE
-    )
+class SaleItem(models.Model):
+    sale = models.ForeignKey(Sale, related_name="sale_items", on_delete=models.CASCADE)
     item = models.ForeignKey(
         Product,
-        related_name="order_items",
+        related_name="sale_items",
         null=True,
         on_delete=models.SET_NULL,
     )

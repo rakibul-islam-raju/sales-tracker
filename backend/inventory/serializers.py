@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from users.serializers import UserSerializer
 
-from .models import Category, Product, Customer, Order, OrderItem
+from .models import Category, Product, Customer, Sale, SaleItem
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -62,23 +62,29 @@ class CustomerSerializer(serializers.ModelSerializer):
         read_only_fields = ["id"]
 
 
-class OrderItemSerializer(serializers.ModelSerializer):
+class SaleItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderItem
+        model = SaleItem
         fields = "__all__"
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    Customer = CustomerSerializer()
+class SaleCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sale
+        fields = "__all__"
+
+
+class SaleSerializer(serializers.ModelSerializer):
+    customer = CustomerSerializer()
     created_by = UserSerializer()
-    order_items = serializers.SerializerMethodField(read_only=True)
+    sale_items = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
-        model = Order
+        model = Sale
         fields = "__all__"
         read_only_fields = ["id"]
 
-    def get_order_items(self, obj):
-        items = obj.order_items.all()
-        serilizer = OrderItemSerializer(items, many=True)
+    def get_sale_items(self, obj):
+        items = obj.sale_items.all()
+        serilizer = SaleItemSerializer(items, many=True)
         return serilizer.data
