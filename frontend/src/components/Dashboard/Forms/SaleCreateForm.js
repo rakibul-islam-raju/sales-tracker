@@ -1,15 +1,27 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../../../redux/actions/productActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
-import { List, ListItemButton, ListItemText } from "@mui/material";
+import {
+	Button,
+	List,
+	ListItemButton,
+	ListItemText,
+	Paper,
+} from "@mui/material";
+import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
+
 import { debounce } from "lodash";
 
 const SaleCreateForm = () => {
 	const [searchVal, setSearchVal] = useState("");
+	const [product, setProduct] = useState(null);
+	const [price, setPrice] = useState("00.00");
+	const [quantity, setQuantity] = useState(0);
+
 	const dispatch = useDispatch();
 
 	// product list state
@@ -20,24 +32,11 @@ const SaleCreateForm = () => {
 		products,
 	} = productList;
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-	};
+	const handleChange = debounce((text) => {
+		setSearchVal(text);
+	}, 1000);
 
-	console.log("search val =>", searchVal);
-	const handleSearch = () => {
-		const params = `search=${searchVal}`;
-		dispatch(listProducts(params));
-	};
-
-	// eslint-disable-next-line react-hooks/exhaustive-deps
-	const debounceLoadData = debounce(handleSearch, 1000);
-
-	const handleChange = (e) => {
-		console.log("target =>", e.target.value);
-		setSearchVal(e.target.value);
-		debounceLoadData();
-	};
+	const handleSubmit = () => {};
 
 	useEffect(() => {
 		if (!products || products.length === 0) {
@@ -46,80 +45,93 @@ const SaleCreateForm = () => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
+	useEffect(() => {
+		const params = `search=${searchVal}`;
+		dispatch(listProducts(params));
+	}, [searchVal, dispatch]);
+
 	return (
-		<Box component="form" onSubmit={handleSubmit}>
-			{productLoading && <Spinner />}
+		<Box>
+			<Paper elevation={1} sx={{ padding: "10px" }}>
+				<TextField
+					id="products"
+					label="Search Product"
+					variant="outlined"
+					fullWidth
+					onChange={(e) => handleChange(e.target.value)}
+				/>
 
-			{productError && typeof productError !== "object" && (
-				<Messages type="error" text={productError} />
-			)}
-
-			<TextField
-				id="products"
-				label="Search Product"
-				variant="outlined"
-				fullWidth
-				value={searchVal}
-				onChange={(e) => {
-					setSearchVal(e.target.value);
-					debounceLoadData();
-				}}
-			/>
-
-			<List>
-				{products?.results?.length === 0 ? (
-					<ListItemButton disablePadding>
-						<ListItemText primary="Product not found!" />
-					</ListItemButton>
+				{productLoading ? (
+					<Spinner />
+				) : productError ? (
+					productError &&
+					typeof productError !== "object" && (
+						<Messages type="error" text={productError} />
+					)
 				) : (
-					products?.results?.map((product) => (
-						<ListItemButton disablePadding sx={{ width: "100%" }}>
-							<ListItemText
-								primary={`${product.name} - ${product.category.name}`}
-							/>
-						</ListItemButton>
-					))
-				)}
-			</List>
-
-			{/* <Autocomplete
-				id="products"
-				options={products?.results}
-				getOptionLabel={(option) =>
-					`${option?.name} - ${option?.category?.name}`
-				}
-				loading={productLoading}
-				// inputValue={input}
-				// onChange={handleChange}
-				// onChange={() => console.log("changing")}
-				isOptionEqualToValue={(option, value) =>
-					option?.name === value?.name
-				}
-				style={{ width: 300 }}
-				renderInput={(params) => (
-					<TextField
-						{...params}
-						label="Product"
-						onChange={handleChange}
-						variant="outlined"
-						fullWidth
-						InputProps={{
-							...params.InputProps,
-							endAdornment: (
-								<React.Fragment>
-									{productLoading ? (
-										<CircularProgress
-											color="inherit"
-											size={20}
-										/>
-									) : null}
-									{params.InputProps.endAdornment}
-								</React.Fragment>
-							),
+					<List
+						sx={{
+							height: "200px",
+							overflow: "scroll",
 						}}
-					/>
+					>
+						{products?.results?.length === 0 ? (
+							<ListItemButton dense divider disablePadding>
+								<ListItemText primary="Product not found!" />
+							</ListItemButton>
+						) : (
+							products?.results?.map((item) => (
+								<ListItemButton
+									dense
+									divider
+									disablePadding
+									onClick={() => setProduct(item)}
+									sx={{
+										display: "flex",
+										justifyContent: "space-between",
+										alignItems: "center",
+									}}
+								>
+									<ListItemText
+										primary={item.name}
+										secondary={item.category.name}
+									/>
+									<ListItemText
+										sx={{ textAlign: "right" }}
+										primary={`$ ${item.price} (${item.quantity})`}
+									/>
+								</ListItemButton>
+							))
+						)}
+					</List>
 				)}
-			/> */}
+			</Paper>
+
+			<Box mt={4} component="form" onSubmit={handleSubmit}>
+				<Box
+					display="flex"
+					alignItems="center"
+					justifyContent="space-between"
+				>
+					<TextField label="Product" value={product?.name || ""} />
+					<TextField
+						type="number"
+						label="Quantity"
+						value={product?.quantity || quantity}
+						onChange={(e) => setQuantity(e.target.value)}
+					/>
+					<TextField
+						type="number"
+						label="Price"
+						value={product?.price || price}
+						onChange={(e) => setPrice(e.target.value)}
+					/>
+				</Box>
+
+				<Button variant="contained" fullWidth sx={{ mt: 2 }}>
+					Add To Bucket <ShoppingCartCheckoutIcon sx={{ ml: 4 }} />
+				</Button>
+			</Box>
 		</Box>
 	);
 };

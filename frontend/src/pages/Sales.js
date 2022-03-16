@@ -49,11 +49,10 @@ const Sales = () => {
 		<Grid container spacing={2} columns={12}>
 			<Grid item md={8}>
 				<SaleCreateForm />
-				{/* <SaleProductsTable /> */}
 			</Grid>
 			<Grid item md={4}>
 				<Paper elevation={1} sx={{ padding: "10px" }}>
-					hellp
+					asdfa sdf asdf
 				</Paper>
 			</Grid>
 		</Grid>

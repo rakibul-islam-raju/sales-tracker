@@ -70,31 +70,31 @@ class Sale(models.Model):
 
 class SaleItem(models.Model):
     sale = models.ForeignKey(Sale, related_name="sale_items", on_delete=models.CASCADE)
-    item = models.ForeignKey(
+    product = models.ForeignKey(
         Product,
         related_name="sale_items",
         null=True,
         on_delete=models.SET_NULL,
     )
-    item_name = models.CharField(max_length=255, null=True)
-    item_code = models.CharField(max_length=20, null=True)
+    product_name = models.CharField(max_length=255, null=True)
+    product_code = models.CharField(max_length=20, null=True)
     quantity = models.PositiveIntegerField()
-    amount = models.FloatField(null=True)
+    price = models.FloatField(null=True)
 
     def save(self, *args, **kwargs):
-        if self.item.quantity < self.quantity:
+        if self.product.quantity < self.quantity:
             raise Exception(
-                f"item with code {self.item.code} does not have enough quantity"
+                f"item with code {self.product.code} does not have enough quantity"
             )
 
-        self.item_name = self.item.name
-        self.item_code = self.item.code
+        self.product_name = self.product.name
+        self.product_code = self.product.code
 
-        self.amount = self.quantity * self.item.price
-        self.item.quantity = self.item.quantity - self.quantity
-        self.item.save()
+        self.price = self.quantity * self.product.price
+        self.product.quantity = self.product.quantity - self.quantity
+        self.product.save()
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.item_code} - {self.quantity}"
+        return f"{self.product_code} - {self.quantity}"
