@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../../../redux/actions/productActions";
+import { addToBucket } from "../../../redux/actions/bucketActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
 import {
@@ -16,11 +17,15 @@ import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 
 import { debounce } from "lodash";
 
-const SaleCreateForm = () => {
+const SaleCreateForm = ({
+	product,
+	setProduct,
+	price,
+	setPrice,
+	quantity,
+	setQuantity,
+}) => {
 	const [searchVal, setSearchVal] = useState("");
-	const [product, setProduct] = useState(null);
-	const [price, setPrice] = useState("00.00");
-	const [quantity, setQuantity] = useState(0);
 
 	const dispatch = useDispatch();
 
@@ -36,7 +41,18 @@ const SaleCreateForm = () => {
 		setSearchVal(text);
 	}, 1000);
 
-	const handleSubmit = () => {};
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		if (product && price && quantity) {
+			dispatch(addToBucket(product, quantity, price));
+			setProduct({});
+			setPrice(0);
+			setQuantity(0);
+		} else {
+			return;
+		}
+	};
 
 	useEffect(() => {
 		if (!products || products.length === 0) {
@@ -82,9 +98,10 @@ const SaleCreateForm = () => {
 						) : (
 							products?.results?.map((item) => (
 								<ListItemButton
+									selected={item.id === product?.id}
+									key={item.id}
 									dense
 									divider
-									disablePadding
 									onClick={() => setProduct(item)}
 									sx={{
 										display: "flex",
@@ -117,18 +134,23 @@ const SaleCreateForm = () => {
 					<TextField
 						type="number"
 						label="Quantity"
-						value={product?.quantity || quantity}
+						value={quantity}
 						onChange={(e) => setQuantity(e.target.value)}
 					/>
 					<TextField
 						type="number"
 						label="Price"
-						value={product?.price || price}
+						value={price}
 						onChange={(e) => setPrice(e.target.value)}
 					/>
 				</Box>
 
-				<Button variant="contained" fullWidth sx={{ mt: 2 }}>
+				<Button
+					type="submit"
+					variant="contained"
+					fullWidth
+					sx={{ mt: 2 }}
+				>
 					Add To Bucket <ShoppingCartCheckoutIcon sx={{ ml: 4 }} />
 				</Button>
 			</Box>

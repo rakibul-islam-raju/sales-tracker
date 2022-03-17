@@ -10,8 +10,8 @@ export const addToBucket = (data, qty, price) => async (dispatch) => {
 			product: data.id,
 			name: data.name,
 			code: data.code,
-			category: data.category,
-			qty,
+			category: data.category.id,
+			quantity: qty,
 			price,
 		},
 	});
