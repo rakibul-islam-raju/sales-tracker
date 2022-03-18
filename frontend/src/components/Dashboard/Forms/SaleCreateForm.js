@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { listProducts } from "../../../redux/actions/productActions";
+import { listCustomers } from "../../../redux/actions/customerActions";
 import { addToBucket } from "../../../redux/actions/bucketActions";
 import Spinner from "../../Spinner";
 import Messages from "../../Messages";
@@ -12,10 +13,12 @@ import {
 	ListItemButton,
 	ListItemText,
 	Paper,
+	Typography,
 } from "@mui/material";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 
 import { debounce } from "lodash";
+import { CUSTOMER_LIST_RESET } from "../../../redux/constants/customerConstants";
 
 const SaleCreateForm = ({
 	product,
@@ -24,7 +27,10 @@ const SaleCreateForm = ({
 	setPrice,
 	quantity,
 	setQuantity,
+	customer,
+	setCustomer,
 }) => {
+	const [customerSearch, setCustomerSearch] = useState("");
 	const [searchVal, setSearchVal] = useState("");
 
 	const dispatch = useDispatch();
@@ -37,7 +43,19 @@ const SaleCreateForm = ({
 		products,
 	} = productList;
 
-	const handleChange = debounce((text) => {
+	// customer list state
+	const customerList = useSelector((state) => state.customerList);
+	const {
+		loading: customerLoading,
+		error: customerError,
+		customers,
+	} = customerList;
+
+	const searchCustomers = debounce((text) => {
+		setCustomerSearch(text);
+	}, 1000);
+
+	const searchProducts = debounce((text) => {
 		setSearchVal(text);
 	}, 1000);
 
@@ -54,6 +72,11 @@ const SaleCreateForm = ({
 		}
 	};
 
+	const customerSelectHandler = (data) => {
+		setCustomer(data);
+		dispatch({ type: CUSTOMER_LIST_RESET });
+	};
+
 	useEffect(() => {
 		if (!products || products.length === 0) {
 			dispatch(listProducts());
@@ -66,15 +89,65 @@ const SaleCreateForm = ({
 		dispatch(listProducts(params));
 	}, [searchVal, dispatch]);
 
+	useEffect(() => {
+		const params = `search=${customerSearch}`;
+		dispatch(listCustomers(params));
+	}, [customerSearch, dispatch]);
+
 	return (
 		<Box>
+			<Typography variant="h5" gutterBottom>
+				Customer
+			</Typography>
+
+			<Paper elevation={1} sx={{ padding: "10px", mb: 2 }}>
+				<TextField
+					id="phone"
+					label="Search Customer"
+					type="text"
+					fullWidth
+					onChange={(e) => searchCustomers(e.target.value)}
+				/>
+				{customerLoading ? (
+					<Spinner />
+				) : (
+					customers?.results?.length > 0 &&
+					customerSearch && (
+						<List>
+							{customers?.results?.map((customer) => (
+								<ListItemButton
+									key={customer.id}
+									divider
+									sx={{
+										display: "flex",
+										justifyContent: "space-between",
+										alignItems: "center",
+									}}
+									onClick={() =>
+										customerSelectHandler(customer)
+									}
+								>
+									<ListItemText>{customer.name}</ListItemText>
+									<ListItemText sx={{ textAlign: "right" }}>
+										{customer.phone}
+									</ListItemText>
+								</ListItemButton>
+							))}
+						</List>
+					)
+				)}
+			</Paper>
+
 			<Paper elevation={1} sx={{ padding: "10px" }}>
+				<Typography variant="h5" gutterBottom>
+					Product
+				</Typography>
 				<TextField
 					id="products"
 					label="Search Product"
 					variant="outlined"
 					fullWidth
-					onChange={(e) => handleChange(e.target.value)}
+					onChange={(e) => searchProducts(e.target.value)}
 				/>
 
 				{productLoading ? (
@@ -92,7 +165,7 @@ const SaleCreateForm = ({
 						}}
 					>
 						{products?.results?.length === 0 ? (
-							<ListItemButton dense divider disablePadding>
+							<ListItemButton dense divider>
 								<ListItemText primary="Product not found!" />
 							</ListItemButton>
 						) : (

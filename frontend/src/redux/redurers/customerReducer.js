@@ -17,7 +17,7 @@ import {
 	CUSTOMER_DELETE_RESET,
 } from "../constants/customerConstants";
 
-export const customerListReducer = (state = {}, action) => {
+export const customerListReducer = (state = { customers: [] }, action) => {
 	switch (action.type) {
 		case CUSTOMER_LIST_REQUEST:
 			return { loading: true, customers: [] };
@@ -30,7 +30,7 @@ export const customerListReducer = (state = {}, action) => {
 		case CUSTOMER_LIST_FAIL:
 			return { loading: false, error: action.payload };
 		case CUSTOMER_LIST_RESET:
-			return {};
+			return { customers: [] };
 		default:
 			return state;
 	}

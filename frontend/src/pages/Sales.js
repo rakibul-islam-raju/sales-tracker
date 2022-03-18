@@ -7,6 +7,7 @@ const Sales = () => {
 	const [product, setProduct] = useState(null);
 	const [price, setPrice] = useState(0);
 	const [quantity, setQuantity] = useState(0);
+	const [customer, setCustomer] = useState({});
 
 	return (
 		<>
@@ -19,6 +20,8 @@ const Sales = () => {
 						setPrice={setPrice}
 						quantity={quantity}
 						setQuantity={setQuantity}
+						customer={customer}
+						setCustomer={setCustomer}
 					/>
 				</Grid>
 				<Grid item sm={12} md={4}>
@@ -29,6 +32,8 @@ const Sales = () => {
 						setPrice={setPrice}
 						quantity={quantity}
 						setQuantity={setQuantity}
+						customer={customer}
+						setCustomer={setCustomer}
 					/>
 				</Grid>
 			</Grid>

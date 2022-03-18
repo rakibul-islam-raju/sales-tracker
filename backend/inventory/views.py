@@ -86,7 +86,7 @@ class CustomerListCreateView(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ["name", "phone", "email"]
-    filterset_fields = ["is_active"]
+    filterset_fields = ["phone", "is_active"]
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)

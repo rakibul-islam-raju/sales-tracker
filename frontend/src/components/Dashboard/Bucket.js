@@ -1,6 +1,7 @@
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import Alert from "@mui/material/Alert";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EditIcon from "@mui/icons-material/Edit";
@@ -17,6 +18,8 @@ const Bucket = ({
 	setPrice,
 	quantity,
 	setQuantity,
+	customer,
+	setCustomer,
 }) => {
 	const dispatch = useDispatch();
 
@@ -37,8 +40,13 @@ const Bucket = ({
 		dispatch(removeFromBucket(item.product));
 	};
 
-	const itemTotal = (total, number) => {
-		return total + Math.round(number);
+	const saleHandler = () => {
+		const data = {
+			customer_id: customer?.id,
+			sale_items: bucketItems,
+		};
+
+		console.log("daata =>>", data);
 	};
 
 	return (
@@ -55,9 +63,30 @@ const Bucket = ({
 				</Typography>
 				<Divider />
 
+				<Box>
+					<Typography variant="h6">Customer</Typography>
+					{customer?.id ? (
+						<>
+							<Typography>Name: {customer?.name}</Typography>
+							<Typography>Phone: {customer?.phone}</Typography>
+							<Typography>Email: {customer?.email}</Typography>
+						</>
+					) : (
+						<Alert sx={{ width: "100%" }} severity="warning">
+							Pleaset select a customer!
+						</Alert>
+					)}
+				</Box>
+				<Typography variant="h6" mt={2}>
+					Products
+				</Typography>
 				<List disablePadding>
 					{bucketItems.length === 0 ? (
-						<ListItem>Bucket is empty!</ListItem>
+						<ListItem>
+							<Alert sx={{ width: "100%" }} severity="warning">
+								Empty Bucket!
+							</Alert>
+						</ListItem>
 					) : (
 						bucketItems.map((item, index) => (
 							<ListItem
@@ -117,8 +146,13 @@ const Bucket = ({
 					)}
 				</List>
 
-				{bucketItems.length > 0 && (
-					<Button variant="contained" fullWidth mt={2}>
+				{bucketItems.length > 0 && customer?.id && (
+					<Button
+						onClick={saleHandler}
+						variant="contained"
+						fullWidth
+						mt={2}
+					>
 						Proceed
 					</Button>
 				)}
