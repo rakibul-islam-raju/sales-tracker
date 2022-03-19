@@ -1,5 +1,7 @@
 from django.db import models
 
+from rest_framework.exceptions import ValidationError
+
 from utils.models import BaseModel
 from users.models import CustomUser
 
@@ -83,14 +85,13 @@ class SaleItem(models.Model):
 
     def save(self, *args, **kwargs):
         if self.product.quantity < self.quantity:
-            raise Exception(
-                f"item with code {self.product.code} does not have enough quantity"
+            raise ValidationError(
+                f'Item with code "{self.product.code}" does not have enough quantity'
             )
 
         self.product_name = self.product.name
         self.product_code = self.product.code
 
-        self.price = self.quantity * self.product.price
         self.product.quantity = self.product.quantity - self.quantity
         self.product.save()
 

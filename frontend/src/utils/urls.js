@@ -5,3 +5,4 @@ export const usersUrl = baseUrl + "/users/";
 export const categoryUrl = baseUrl + "/inventory/categories/";
 export const productsUrl = baseUrl + "/inventory/products/";
 export const customerUrl = baseUrl + "/inventory/customers/";
+export const saleUrl = baseUrl + "/inventory/sales/";

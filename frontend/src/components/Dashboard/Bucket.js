@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
@@ -5,11 +6,14 @@ import Alert from "@mui/material/Alert";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import EditIcon from "@mui/icons-material/Edit";
+import { Box, Button, ButtonGroup, List, ListItem } from "@mui/material";
+import Spinner from "../Spinner";
+import Messages from "../Messages";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromBucket } from "../../redux/actions/bucketActions";
-
-import React from "react";
-import { Box, Button, ButtonGroup, List, ListItem } from "@mui/material";
+import { createSales } from "../../redux/actions/saleAction";
+import { SALE_CREATE_RESET } from "../../redux/constants/saleConstants";
+import { BUCKET_CLEAR } from "../../redux/constants/bucketConstants";
 
 const Bucket = ({
 	product,
@@ -21,14 +25,25 @@ const Bucket = ({
 	customer,
 	setCustomer,
 }) => {
+	const [showMessage, setShowMessage] = useState(false);
+
 	const dispatch = useDispatch();
 
 	// bucket state
 	const bucket = useSelector((state) => state.bucket);
 	const { bucketItems } = bucket;
 
+	// product list state
 	const productList = useSelector((state) => state.productList);
 	const { products } = productList;
+
+	// sale create state
+	const saleCreate = useSelector((state) => state.saleCreate);
+	const {
+		loading: createLoading,
+		error: createError,
+		success: createSuccess,
+	} = saleCreate;
 
 	const editHandler = (item) => {
 		const editProduct = products?.results.find(
@@ -45,9 +60,27 @@ const Bucket = ({
 			customer_id: customer?.id,
 			sale_items: bucketItems,
 		};
-
-		console.log("daata =>>", data);
+		dispatch(createSales(data));
 	};
+
+	useEffect(() => {
+		if (createSuccess) {
+			dispatch({ type: SALE_CREATE_RESET });
+			dispatch({ type: BUCKET_CLEAR });
+			setProduct({});
+			setPrice(0);
+			setQuantity(0);
+			setCustomer({});
+			setShowMessage(true);
+		}
+	}, [
+		createSuccess,
+		dispatch,
+		setProduct,
+		setPrice,
+		setQuantity,
+		setCustomer,
+	]);
 
 	return (
 		<div>
@@ -146,15 +179,30 @@ const Bucket = ({
 					)}
 				</List>
 
-				{bucketItems.length > 0 && customer?.id && (
-					<Button
-						onClick={saleHandler}
-						variant="contained"
-						fullWidth
-						mt={2}
-					>
-						Proceed
-					</Button>
+				{createError &&
+					createError &&
+					typeof productError !== "object" && (
+						<Messages type="error" text={createError} />
+					)}
+
+				{showMessage && (
+					<Messages type="success" text="Successfully sold!" />
+				)}
+
+				{createLoading ? (
+					<Spinner />
+				) : (
+					bucketItems.length > 0 &&
+					customer?.id && (
+						<Button
+							onClick={saleHandler}
+							variant="contained"
+							fullWidth
+							mt={2}
+						>
+							Proceed
+						</Button>
+					)
 				)}
 			</Paper>
 		</div>

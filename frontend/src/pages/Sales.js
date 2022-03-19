@@ -4,7 +4,7 @@ import SaleCreateForm from "../components/Dashboard/Forms/SaleCreateForm";
 import Bucket from "../components/Dashboard/Bucket";
 
 const Sales = () => {
-	const [product, setProduct] = useState(null);
+	const [product, setProduct] = useState({});
 	const [price, setPrice] = useState(0);
 	const [quantity, setQuantity] = useState(0);
 	const [customer, setCustomer] = useState({});

@@ -30,6 +30,12 @@ import {
 	customerEditReducer,
 	customerDeleteReducer,
 } from "./redurers/customerReducer";
+import {
+	saleListReducer,
+	saleCreateReducer,
+	saleEditReducer,
+	saleDeleteReducer,
+} from "./redurers/saleReducers";
 import { bucketReducer } from "./redurers/bucketReducers";
 
 // Combine reducers
@@ -57,6 +63,11 @@ const reducer = combineReducers({
 	customerCreate: customerCreateReducer,
 	customerEdit: customerEditReducer,
 	customerDelete: customerDeleteReducer,
+	// sales
+	saleList: saleListReducer,
+	saleCreate: saleCreateReducer,
+	saleEdit: saleEditReducer,
+	saleDelete: saleDeleteReducer,
 	// bucket
 	bucket: bucketReducer,
 });
