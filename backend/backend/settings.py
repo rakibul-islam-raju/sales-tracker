@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "django_filters",
     "corsheaders",
+    "whitenoise.runserver_nostatic",
     # Local
     "users.apps.UsersConfig",
     "inventory.apps.InventoryConfig",
@@ -94,8 +95,8 @@ DATABASES = {
 }
 
 
-DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=True)
-
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES["default"].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
@@ -133,6 +134,8 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
