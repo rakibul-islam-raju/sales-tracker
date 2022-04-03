@@ -29,6 +29,7 @@ const SaleCreateForm = ({
 	setQuantity,
 	customer,
 	setCustomer,
+	customerRef,
 }) => {
 	const [customerSearch, setCustomerSearch] = useState("");
 	const [searchVal, setSearchVal] = useState("");
@@ -101,13 +102,15 @@ const SaleCreateForm = ({
 			</Typography>
 
 			<Paper elevation={1} sx={{ padding: "10px", mb: 2 }}>
-				<TextField
-					id="phone"
-					label="Search Customer"
-					type="text"
-					fullWidth
-					onChange={(e) => searchCustomers(e.target.value)}
-				/>
+				<form ref={customerRef}>
+					<TextField
+						id="phone"
+						label="Search Customer"
+						type="text"
+						fullWidth
+						onChange={(e) => searchCustomers(e.target.value)}
+					/>
+				</form>
 				{customerLoading ? (
 					<Spinner />
 				) : (

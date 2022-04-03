@@ -24,6 +24,7 @@ const Bucket = ({
 	setQuantity,
 	customer,
 	setCustomer,
+	customerRef,
 }) => {
 	const [showMessage, setShowMessage] = useState(false);
 
@@ -72,15 +73,18 @@ const Bucket = ({
 			setQuantity(0);
 			setCustomer({});
 			setShowMessage(true);
+			customerRef.current.reset();
 		}
-	}, [
-		createSuccess,
-		dispatch,
-		setProduct,
-		setPrice,
-		setQuantity,
-		setCustomer,
-	]);
+
+		const showSuccessMsg = setInterval(() => {
+			setShowMessage(false);
+		}, 5000);
+
+		return () => {
+			clearInterval(showSuccessMsg);
+		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [createSuccess]);
 
 	return (
 		<div>

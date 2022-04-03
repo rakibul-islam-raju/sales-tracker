@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Grid from "@mui/material/Grid";
 import SaleCreateForm from "../components/Dashboard/Forms/SaleCreateForm";
 import Bucket from "../components/Dashboard/Bucket";
@@ -8,6 +8,8 @@ const Sales = () => {
 	const [price, setPrice] = useState(0);
 	const [quantity, setQuantity] = useState(0);
 	const [customer, setCustomer] = useState({});
+
+	const customerRef = useRef();
 
 	return (
 		<>
@@ -22,6 +24,7 @@ const Sales = () => {
 						setQuantity={setQuantity}
 						customer={customer}
 						setCustomer={setCustomer}
+						customerRef={customerRef}
 					/>
 				</Grid>
 				<Grid item sm={12} md={4}>
@@ -34,6 +37,7 @@ const Sales = () => {
 						setQuantity={setQuantity}
 						customer={customer}
 						setCustomer={setCustomer}
+						customerRef={customerRef}
 					/>
 				</Grid>
 			</Grid>
