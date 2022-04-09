@@ -87,7 +87,6 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 	};
 
 	useEffect(() => {
-		console.log("products =>>", products?.length);
 		if (products.length === 0) {
 			dispatch(listProducts());
 		}
@@ -181,11 +180,9 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 			<Pagination
 				count={products?.count}
 				page={page - 1}
-				rowsPerPageOptions={[2, 3]}
 				rowsPerPage={rowsPerPage}
 				setPage={setPage}
 				handleChangePage={handleChangePage}
-				// handleChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
 		</TableContainer>
 	);

@@ -53,7 +53,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
-    queryset = Product.objects.filter(is_active=True)
+    queryset = Product.objects.all()
     permission_classes = [IsAuthenticated]
     filter_backends = [
         filters.SearchFilter,

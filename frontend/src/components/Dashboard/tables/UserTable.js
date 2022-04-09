@@ -203,11 +203,9 @@ const UserTable = ({ handleCategoryEdit }) => {
 			<Pagination
 				count={users?.count}
 				page={page - 1}
-				rowsPerPageOptions={[2, 3]}
 				rowsPerPage={rowsPerPage}
 				setPage={setPage}
 				handleChangePage={handleChangePage}
-				// handleChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
 		</TableContainer>
 	);

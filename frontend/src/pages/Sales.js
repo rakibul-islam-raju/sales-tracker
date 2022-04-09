@@ -1,55 +1,25 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { listProducts } from "../redux/actions/productActions";
-import Button from "@mui/material/Button";
+import { listSales } from "../redux/actions/saleAction";
 import Box from "@mui/material/Box";
-import AddIcon from "@mui/icons-material/Add";
-import ProductTable from "../components/Dashboard/tables/ProductTable";
-import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
-import FormModal from "../components/FormModal";
 import SearchBox from "../components/SearchBox";
 import SalesTable from "../components/Dashboard/tables/SalesTable";
 
 const Sales = () => {
-	const [open, setOpen] = React.useState(false);
-	const [editProduct, setEditProduct] = React.useState(null);
 	const [searchVal, setSearchVal] = React.useState("");
 
 	const dispatch = useDispatch();
-
-	// // modal close handler
-	// const handleClose = () => {
-	// 	setOpen(false);
-	// };
-
-	// // product edit handler
-	// const handleProductEdit = (product) => {
-	// 	setEditProduct(product);
-	// 	setOpen(true);
-	// };
 
 	// sale search handler
 	const handleSearch = (e) => {
 		e.preventDefault();
 
 		const params = `search=${searchVal}`;
-		dispatch(listProducts(params));
+		dispatch(listSales(params));
 	};
 
 	return (
 		<>
-			{/* <FormModal
-				open={open}
-				handleClose={handleClose}
-				title={editProduct ? "Edit Sale" : "Create New Sale"}
-				formElement={
-					<ProductCreateForm
-						editProduct={editProduct}
-						setOpen={setOpen}
-					/>
-				}
-			/> */}
-
 			<Box
 				mb={4}
 				display="flex"
@@ -61,15 +31,9 @@ const Sales = () => {
 					setSearchVal={setSearchVal}
 					handleSearch={handleSearch}
 				/>
-				{/* <Button variant="contained" onClick={handleProductCreate}>
-					<AddIcon /> New Product
-				</Button> */}
 			</Box>
 
-			<SalesTable
-				// handleProductEdit={handleProductEdit}
-				searchVal={searchVal}
-			/>
+			<SalesTable searchVal={searchVal} />
 		</>
 	);
 };

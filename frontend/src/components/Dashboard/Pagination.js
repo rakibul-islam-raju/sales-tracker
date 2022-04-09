@@ -1,12 +1,11 @@
 import * as React from "react";
 import TablePagination from "@mui/material/TablePagination";
+import { rowsPerPage } from "../../config";
 
 const Pagination = ({
 	count,
 	page,
-	rowsPerPageOptions,
 	handleChangePage,
-	rowsPerPage,
 	handleChangeRowsPerPage,
 }) => {
 	return (
@@ -15,7 +14,7 @@ const Pagination = ({
 			count={count}
 			page={page}
 			onPageChange={handleChangePage}
-			rowsPerPageOptions={rowsPerPageOptions}
+			rowsPerPageOptions={[]}
 			rowsPerPage={rowsPerPage}
 			// onRowsPerPageChange={handleChangeRowsPerPage}
 		/>

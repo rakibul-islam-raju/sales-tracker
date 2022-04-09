@@ -14,7 +14,6 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Messages from "../../../components/Messages";
 import Spinner from "../../../components/Spinner";
@@ -46,10 +45,6 @@ const SalesTable = ({ searchVal }) => {
 		setRowsPerPage(parseInt(event.target.value));
 		// setPage(0);
 	};
-
-	// useState state
-	const userLogin = useSelector((state) => state.userLogin);
-	const { userInfo } = userLogin;
 
 	// sales list state
 	const saleList = useSelector((state) => state.saleList);
@@ -179,11 +174,9 @@ const SalesTable = ({ searchVal }) => {
 			<Pagination
 				count={sales?.count}
 				page={page - 1}
-				rowsPerPageOptions={[2, 3]}
 				rowsPerPage={rowsPerPage}
 				setPage={setPage}
 				handleChangePage={handleChangePage}
-				// handleChangeRowsPerPage={handleChangeRowsPerPage}
 			/>
 		</TableContainer>
 	);
