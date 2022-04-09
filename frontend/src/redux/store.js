@@ -33,6 +33,7 @@ import {
 import {
 	saleListReducer,
 	saleCreateReducer,
+	saleDetailReducer,
 	saleEditReducer,
 	saleDeleteReducer,
 } from "./redurers/saleReducers";
@@ -66,6 +67,7 @@ const reducer = combineReducers({
 	// sales
 	saleList: saleListReducer,
 	saleCreate: saleCreateReducer,
+	saleDetail: saleDetailReducer,
 	saleEdit: saleEditReducer,
 	saleDelete: saleDeleteReducer,
 	// bucket

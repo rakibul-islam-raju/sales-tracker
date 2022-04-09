@@ -6,6 +6,7 @@ import {
 	Dashboard,
 	NewSale,
 	Sales,
+	SaleDetails,
 	Products,
 	Categories,
 	Customers,
@@ -30,6 +31,7 @@ const router = () => {
 				>
 					<Route index element={<Dashboard />} />
 					<Route path="/sales" element={<Sales />} />
+					<Route path="/sales/:saleId" element={<SaleDetails />} />
 					<Route path="/sale/new" element={<NewSale />} />
 					<Route path="/products" element={<Products />} />
 					<Route path="/categories" element={<Categories />} />

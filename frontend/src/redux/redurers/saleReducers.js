@@ -7,6 +7,10 @@ import {
 	SALE_CREATE_SUCCESS,
 	SALE_CREATE_FAIL,
 	SALE_CREATE_RESET,
+	SALE_DETAIL_REQUEST,
+	SALE_DETAIL_SUCCESS,
+	SALE_DETAIL_FAIL,
+	SALE_DETAIL_RESET,
 	SALE_EDIT_REQUEST,
 	SALE_EDIT_SUCCESS,
 	SALE_EDIT_FAIL,
@@ -31,6 +35,28 @@ export const saleListReducer = (state = {}, action) => {
 			return { loading: false, error: action.payload };
 		case SALE_LIST_RESET:
 			return {};
+		default:
+			return state;
+	}
+};
+
+export const saleDetailReducer = (state = {}, action) => {
+	switch (action.type) {
+		case SALE_DETAIL_REQUEST:
+			return { loading: true };
+
+		case SALE_DETAIL_SUCCESS:
+			return {
+				loading: false,
+				sale: action.payload,
+			};
+
+		case SALE_DETAIL_FAIL:
+			return { loading: false, error: action.payload };
+
+		case SALE_DETAIL_RESET:
+			return {};
+
 		default:
 			return state;
 	}

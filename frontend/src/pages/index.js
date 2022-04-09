@@ -3,6 +3,7 @@ export { default as Dashboard } from "./Dashboard";
 export { default as Products } from "./Products";
 export { default as NewSale } from "./NewSale";
 export { default as Sales } from "./Sales";
+export { default as SaleDetails } from "./SaleDetails";
 export { default as Categories } from "./Categories";
 export { default as Customers } from "./Customers";
 export { default as Users } from "./Users";

@@ -15,13 +15,16 @@ import Paper from "@mui/material/Paper";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArticleIcon from "@mui/icons-material/Article";
 import Messages from "../../../components/Messages";
 import Spinner from "../../../components/Spinner";
 import ConfirmModal from "../../ConfirmModal";
 import Pagination from "../Pagination";
+import { useNavigate } from "react-router-dom";
 
 const SalesTable = ({ searchVal }) => {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
 	const [deleteVal, setDeleteVal] = useState(false);
@@ -78,6 +81,10 @@ const SalesTable = ({ searchVal }) => {
 		}
 	};
 
+	const handleDetail = (saleId) => {
+		navigate(`/sales/${saleId}`);
+	};
+
 	useEffect(() => {
 		if (!sales) {
 			dispatch(listSales());
@@ -110,8 +117,8 @@ const SalesTable = ({ searchVal }) => {
 				open={openDeleteModal}
 				value={deleteVal}
 				onClose={handleClose}
-				title="Delete Product"
-				desc="Are you sure to delete this product? This action cannot be undo!"
+				title="Delete Sale"
+				desc="Are you sure to delete this sale? This action cannot be undo!"
 			/>
 
 			<Table
@@ -152,12 +159,12 @@ const SalesTable = ({ searchVal }) => {
 							<TableCell align="right">500</TableCell>
 							<TableCell align="right">
 								<ButtonGroup>
-									{/* <Button
+									<Button
 										variant="outline"
-										onClick={() => handleProductEdit(row)}
+										onClick={() => handleDetail(row.id)}
 									>
-										<EditIcon color="primary" />
-									</Button> */}
+										<ArticleIcon color="info" />
+									</Button>
 									<Button
 										variant="outline"
 										onClick={() => handleSaleDelete(row.id)}

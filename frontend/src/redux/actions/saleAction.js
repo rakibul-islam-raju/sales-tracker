@@ -5,6 +5,10 @@ import {
 	SALE_CREATE_REQUEST,
 	SALE_CREATE_SUCCESS,
 	SALE_CREATE_FAIL,
+	SALE_DETAIL_REQUEST,
+	SALE_DETAIL_SUCCESS,
+	SALE_DETAIL_FAIL,
+	SALE_DETAIL_RESET,
 	SALE_EDIT_REQUEST,
 	SALE_EDIT_SUCCESS,
 	SALE_EDIT_FAIL,
@@ -32,10 +36,10 @@ export const listSales = (params) => async (dispatch) => {
 	}
 };
 
-export const createSales = (categoryData) => async (dispatch) => {
+export const createSales = (saleData) => async (dispatch) => {
 	try {
 		dispatch({ type: SALE_CREATE_REQUEST });
-		const { data } = await axiosPrivateInstance.post(saleUrl, categoryData);
+		const { data } = await axiosPrivateInstance.post(saleUrl, saleData);
 		dispatch({ type: SALE_CREATE_SUCCESS, payload: data });
 	} catch (error) {
 		dispatch({
@@ -50,12 +54,30 @@ export const createSales = (categoryData) => async (dispatch) => {
 	}
 };
 
-export const editSales = (id, categoryData) => async (dispatch) => {
+export const detailSales = (saleId) => async (dispatch) => {
+	try {
+		dispatch({ type: SALE_DETAIL_REQUEST });
+		const { data } = await axiosPrivateInstance.get(saleUrl + saleId);
+		dispatch({ type: SALE_DETAIL_SUCCESS, payload: data });
+	} catch (error) {
+		dispatch({
+			type: SALE_DETAIL_FAIL,
+			payload:
+				error.response.status === 500
+					? error.response.statusText
+					: error.response && error.response.data
+					? error.response.data
+					: error.message,
+		});
+	}
+};
+
+export const editSales = (id, saleData) => async (dispatch) => {
 	try {
 		dispatch({ type: SALE_EDIT_REQUEST });
 		const { data } = await axiosPrivateInstance.patch(
 			saleUrl + id + "/",
-			categoryData
+			saleData
 		);
 		dispatch({ type: SALE_EDIT_SUCCESS, payload: data });
 	} catch (error) {

@@ -64,6 +64,8 @@ const Bucket = ({
 		dispatch(createSales(data));
 	};
 
+	console.log("saleCreate==>", saleCreate);
+
 	useEffect(() => {
 		if (createSuccess) {
 			dispatch({ type: SALE_CREATE_RESET });
