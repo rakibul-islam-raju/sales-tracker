@@ -53,7 +53,7 @@ class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class ProductListCreateView(generics.ListCreateAPIView):
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(is_active=True)
     permission_classes = [IsAuthenticated]
     filter_backends = [
         filters.SearchFilter,
@@ -161,3 +161,9 @@ class SalesView(generics.ListCreateAPIView):
             data = self.serializer_class(sale, many=False)
 
             return Response(data.data)
+
+
+class SaleDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = SaleSerializer
+    queryset = Sale.objects.all()
+    permission_classes = [IsAuthenticated]
