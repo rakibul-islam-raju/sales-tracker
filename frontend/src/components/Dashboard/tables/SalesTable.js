@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { listSales, deleteSales } from "../../../redux/actions/saleAction";
 import {
-	listProducts,
-	deleteProducts,
-} from "../../../redux/actions/productActions";
-import {
-	PRODUCT_LIST_RESET,
-	PRODUCT_DELETE_RESET,
-} from "../../../redux/constants/productConstants";
+	SALE_LIST_RESET,
+	SALE_DELETE_RESET,
+} from "../../../redux/constants/saleConstants";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -24,7 +21,7 @@ import Spinner from "../../../components/Spinner";
 import ConfirmModal from "../../ConfirmModal";
 import Pagination from "../Pagination";
 
-const ProductTable = ({ handleProductEdit, searchVal }) => {
+const SalesTable = ({ searchVal }) => {
 	const dispatch = useDispatch();
 
 	const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -41,7 +38,7 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 		let params = searchVal
 			? `page=${newPage + 1}&search=${searchVal}`
 			: `page=${newPage + 1}`;
-		dispatch(listProducts(params));
+		dispatch(listSales(params));
 	};
 
 	// row per page change handler
@@ -54,20 +51,20 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
 
-	// product list state
-	const productList = useSelector((state) => state.productList);
-	const { loading: listLoading, error: listError, products } = productList;
+	// sales list state
+	const saleList = useSelector((state) => state.saleList);
+	const { loading: saleLoading, error: saleError, sales } = saleList;
 
-	// product delete state
-	const productDelete = useSelector((state) => state.productDelete);
+	// sale delete state
+	const saleDelete = useSelector((state) => state.saleDelete);
 	const {
 		loading: deleteLoading,
 		error: deleteError,
 		success: deleteSuccess,
-	} = productDelete;
+	} = saleDelete;
 
-	// handler for product delete
-	const handleProductDelete = (id) => {
+	// handler for sale delete
+	const handleSaleDelete = (id) => {
 		// open confirm modal
 		setOpenDeleteModal(true);
 		setCurrentID(id);
@@ -81,32 +78,31 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 		// value from confirm modal
 		if (newValue) {
 			setDeleteVal(true);
-			dispatch(deleteProducts(currentID));
+			dispatch(deleteSales(currentID));
 			setCurrentID(null);
 		}
 	};
 
 	useEffect(() => {
-		console.log("products =>>", products?.length);
-		if (products.length === 0) {
-			dispatch(listProducts());
+		if (!sales) {
+			dispatch(listSales());
 		}
 
 		// after delete
 		if (deleteSuccess) {
 			setDeleteVal(false);
-			dispatch({ type: PRODUCT_DELETE_RESET });
-			dispatch({ type: PRODUCT_LIST_RESET });
+			dispatch({ type: SALE_DELETE_RESET });
+			dispatch({ type: SALE_LIST_RESET });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [dispatch, deleteSuccess]);
 
 	return (
 		<TableContainer component={Paper}>
-			{(listLoading || deleteLoading) && <Spinner />}
+			{(saleLoading || deleteLoading) && <Spinner />}
 
-			{listError && typeof listError !== "object" && (
-				<Messages type="error" text={listError} />
+			{saleError && typeof listError !== "object" && (
+				<Messages type="error" text={saleError} />
 			)}
 
 			{deleteError && typeof deleteError !== "object" && (
@@ -130,16 +126,16 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 			>
 				<TableHead>
 					<TableRow>
-						<TableCell>Product</TableCell>
-						<TableCell align="right">Code</TableCell>
-						<TableCell align="right">Category</TableCell>
-						<TableCell align="right">Price</TableCell>
-						<TableCell align="right">Quantity</TableCell>
+						<TableCell>Customer</TableCell>
+						<TableCell align="right">Phone</TableCell>
+						<TableCell align="right">Email</TableCell>
+						<TableCell align="right">Total Item</TableCell>
+						<TableCell align="right">Total Price</TableCell>
 						<TableCell align="right">Actions</TableCell>
 					</TableRow>
 				</TableHead>
 				<TableBody>
-					{products?.results?.map((row) => (
+					{sales?.results?.map((row) => (
 						<TableRow
 							key={row.id}
 							sx={{
@@ -148,26 +144,28 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 								},
 							}}
 						>
-							<TableCell>{row.name}</TableCell>
-							<TableCell align="right">ASD002</TableCell>
+							<TableCell>{row?.customer?.name}</TableCell>
 							<TableCell align="right">
-								{row.category?.name}
+								{row?.customer?.phone}
 							</TableCell>
-							<TableCell align="right">{row.price}</TableCell>
-							<TableCell align="right">{row.quantity}</TableCell>
+							<TableCell align="right">
+								{row?.customer?.email}
+							</TableCell>
+							<TableCell align="right">
+								{(row?.sale_items).length}
+							</TableCell>
+							<TableCell align="right">500</TableCell>
 							<TableCell align="right">
 								<ButtonGroup>
-									<Button
+									{/* <Button
 										variant="outline"
 										onClick={() => handleProductEdit(row)}
 									>
 										<EditIcon color="primary" />
-									</Button>
+									</Button> */}
 									<Button
 										variant="outline"
-										onClick={() =>
-											handleProductDelete(row.id)
-										}
+										onClick={() => handleSaleDelete(row.id)}
 									>
 										<DeleteIcon color="error" />
 									</Button>
@@ -179,7 +177,7 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 			</Table>
 
 			<Pagination
-				count={products?.count}
+				count={sales?.count}
 				page={page - 1}
 				rowsPerPageOptions={[2, 3]}
 				rowsPerPage={rowsPerPage}
@@ -191,4 +189,4 @@ const ProductTable = ({ handleProductEdit, searchVal }) => {
 	);
 };
 
-export default React.memo(ProductTable);
+export default React.memo(SalesTable);

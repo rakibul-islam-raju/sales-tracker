@@ -8,7 +8,8 @@ import { NavLink } from "react-router-dom";
 
 const mainMenus = [
 	{ title: "Dashboard", path: "/", icon: <DashboardIcon /> },
-	{ title: "Sales", path: "/sales", icon: <AllInboxIcon /> },
+	{ title: "New Sale", path: "/sale/new", icon: <AllInboxIcon /> },
+	{ title: "All Sales", path: "/sales", icon: <AllInboxIcon /> },
 	{ title: "Products", path: "/products", icon: <AllInboxIcon /> },
 	{ title: "Categories", path: "/categories", icon: <CategoryIcon /> },
 	{ title: "Customers", path: "/customers", icon: <PeopleAltIcon /> },

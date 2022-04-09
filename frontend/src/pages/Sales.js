@@ -1,46 +1,75 @@
-import React, { useState, useRef } from "react";
-import Grid from "@mui/material/Grid";
-import SaleCreateForm from "../components/Dashboard/Forms/SaleCreateForm";
-import Bucket from "../components/Dashboard/Bucket";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { listProducts } from "../redux/actions/productActions";
+import Button from "@mui/material/Button";
+import Box from "@mui/material/Box";
+import AddIcon from "@mui/icons-material/Add";
+import ProductTable from "../components/Dashboard/tables/ProductTable";
+import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
+import FormModal from "../components/FormModal";
+import SearchBox from "../components/SearchBox";
+import SalesTable from "../components/Dashboard/tables/SalesTable";
 
 const Sales = () => {
-	const [product, setProduct] = useState({});
-	const [price, setPrice] = useState(0);
-	const [quantity, setQuantity] = useState(0);
-	const [customer, setCustomer] = useState({});
+	const [open, setOpen] = React.useState(false);
+	const [editProduct, setEditProduct] = React.useState(null);
+	const [searchVal, setSearchVal] = React.useState("");
 
-	const customerRef = useRef();
+	const dispatch = useDispatch();
+
+	// // modal close handler
+	// const handleClose = () => {
+	// 	setOpen(false);
+	// };
+
+	// // product edit handler
+	// const handleProductEdit = (product) => {
+	// 	setEditProduct(product);
+	// 	setOpen(true);
+	// };
+
+	// sale search handler
+	const handleSearch = (e) => {
+		e.preventDefault();
+
+		const params = `search=${searchVal}`;
+		dispatch(listProducts(params));
+	};
 
 	return (
 		<>
-			<Grid container spacing={2} columns={12}>
-				<Grid item sm={12} md={8}>
-					<SaleCreateForm
-						product={product}
-						setProduct={setProduct}
-						price={price}
-						setPrice={setPrice}
-						quantity={quantity}
-						setQuantity={setQuantity}
-						customer={customer}
-						setCustomer={setCustomer}
-						customerRef={customerRef}
+			{/* <FormModal
+				open={open}
+				handleClose={handleClose}
+				title={editProduct ? "Edit Sale" : "Create New Sale"}
+				formElement={
+					<ProductCreateForm
+						editProduct={editProduct}
+						setOpen={setOpen}
 					/>
-				</Grid>
-				<Grid item sm={12} md={4}>
-					<Bucket
-						product={product}
-						setProduct={setProduct}
-						price={price}
-						setPrice={setPrice}
-						quantity={quantity}
-						setQuantity={setQuantity}
-						customer={customer}
-						setCustomer={setCustomer}
-						customerRef={customerRef}
-					/>
-				</Grid>
-			</Grid>
+				}
+			/> */}
+
+			<Box
+				mb={4}
+				display="flex"
+				justifyContent="space-between"
+				alignItems="center"
+			>
+				<SearchBox
+					searchVal={searchVal}
+					setSearchVal={setSearchVal}
+					handleSearch={handleSearch}
+				/>
+				{/* <Button variant="contained" onClick={handleProductCreate}>
+					<AddIcon /> New Product
+				</Button> */}
+			</Box>
+
+			<SalesTable
+				// handleProductEdit={handleProductEdit}
+				searchVal={searchVal}
+			/>
 		</>
 	);
 };
