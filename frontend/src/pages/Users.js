@@ -9,8 +9,9 @@ import UserTable from "../components/Dashboard/tables/UserTable";
 import UserCreateForm from "../components/Dashboard/Forms/UserCreateForm";
 import UserEditForm from "../components/Dashboard/Forms/UserEditForm";
 import SearchBox from "../components/SearchBox";
+import CachedIcon from "@mui/icons-material/Cached";
 
-const Categories = () => {
+const Users = () => {
 	const [open, setOpen] = React.useState(false);
 	const [editUser, setEditUser] = React.useState(null);
 	const [searchVal, setSearchVal] = React.useState("");
@@ -35,6 +36,10 @@ const Categories = () => {
 	const handleUserEdit = (user) => {
 		setEditUser(user);
 		setOpen(true);
+	};
+
+	const refreshPage = () => {
+		dispatch(listUsers());
 	};
 
 	// search handler
@@ -71,11 +76,21 @@ const Categories = () => {
 					searchVal={searchVal}
 					setSearchVal={setSearchVal}
 				/>
-				{userInfo?.is_staff && (
-					<Button variant="contained" onClick={handleUserCreate}>
-						<AddIcon /> New User
+				<Box>
+					<Button
+						variant="contained"
+						onClick={refreshPage}
+						sx={{ mr: 1 }}
+					>
+						<CachedIcon />
 					</Button>
-				)}
+
+					{userInfo?.is_staff && (
+						<Button variant="contained" onClick={handleUserCreate}>
+							<AddIcon /> New User
+						</Button>
+					)}
+				</Box>
 			</Box>
 
 			<UserTable handleCategoryEdit={handleUserEdit} />
@@ -83,4 +98,4 @@ const Categories = () => {
 	);
 };
 
-export default Categories;
+export default Users;

@@ -8,6 +8,7 @@ import FormModal from "../components/FormModal";
 import CustomerTable from "../components/Dashboard/tables/customerTable";
 import CustomerCreateForm from "../components/Dashboard/Forms/CustomerCreateForm";
 import SearchBox from "../components/SearchBox";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const Customers = () => {
 	const [open, setOpen] = React.useState(false);
@@ -31,6 +32,10 @@ const Customers = () => {
 	const handleCustomerEdit = (customer) => {
 		setEditCustomer(customer);
 		setOpen(true);
+	};
+
+	const refreshPage = () => {
+		dispatch(listCustomers());
 	};
 
 	// search handler
@@ -66,9 +71,19 @@ const Customers = () => {
 					searchVal={searchVal}
 					setSearchVal={setSearchVal}
 				/>
-				<Button variant="contained" onClick={handleCustomerCreate}>
-					<AddIcon /> New Customer
-				</Button>
+
+				<Box>
+					<Button
+						variant="contained"
+						onClick={refreshPage}
+						sx={{ mr: 1 }}
+					>
+						<CachedIcon />
+					</Button>
+					<Button variant="contained" onClick={handleCustomerCreate}>
+						<AddIcon /> New Customer
+					</Button>
+				</Box>
 			</Box>
 
 			<CustomerTable handleCustomerEdit={handleCustomerEdit} />

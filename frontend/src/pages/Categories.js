@@ -8,6 +8,7 @@ import CategoryCreateForm from "../components/Dashboard/Forms/CategoryCreateForm
 import SearchBox from "../components/SearchBox";
 import { listCategories } from "../redux/actions/categoryActions";
 import { useDispatch } from "react-redux";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const Categories = () => {
 	const [open, setOpen] = React.useState(false);
@@ -31,6 +32,10 @@ const Categories = () => {
 	const handleCategoryEdit = (product) => {
 		setEditCategory(product);
 		setOpen(true);
+	};
+
+	const refreshPage = () => {
+		dispatch(listCategories());
 	};
 
 	// search handler
@@ -66,9 +71,19 @@ const Categories = () => {
 					searchVal={searchVal}
 					setSearchVal={setSearchVal}
 				/>
-				<Button variant="contained" onClick={handleCategoryCreate}>
-					<AddIcon /> New Category
-				</Button>
+
+				<Box>
+					<Button
+						variant="contained"
+						onClick={refreshPage}
+						sx={{ mr: 1 }}
+					>
+						<CachedIcon />
+					</Button>
+					<Button variant="contained" onClick={handleCategoryCreate}>
+						<AddIcon /> New Category
+					</Button>
+				</Box>
 			</Box>
 
 			<CategoryTable handleCategoryEdit={handleCategoryEdit} />

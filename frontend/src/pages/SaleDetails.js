@@ -17,6 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import Spinner from "../components/Spinner";
 import Messages from "../components/Messages";
 import PrintIcon from "@mui/icons-material/Print";
+import { TableFooter } from "@mui/material";
 
 const SaleDetails = () => {
 	const { saleId } = useParams();
@@ -27,7 +28,10 @@ const SaleDetails = () => {
 	const saleDetail = useSelector((state) => state.saleDetail);
 	const { loading, error, sale } = saleDetail;
 
-	console.log("sale =>", sale);
+	const totalPrice = sale?.sale_items.reduce(
+		(acc, item) => acc + item.price * item.quantity,
+		0
+	);
 
 	useEffect(() => {
 		dispatch(detailSales(saleId));
@@ -91,13 +95,13 @@ const SaleDetails = () => {
 									<TableRow>
 										<TableCell>Product Name</TableCell>
 										<TableCell align="right">
-											Code
-										</TableCell>
-										<TableCell align="right">
 											Quantity
 										</TableCell>
 										<TableCell align="right">
 											Price
+										</TableCell>
+										<TableCell align="right">
+											Total
 										</TableCell>
 									</TableRow>
 								</TableHead>
@@ -117,17 +121,27 @@ const SaleDetails = () => {
 												{row?.product_name}
 											</TableCell>
 											<TableCell align="right">
-												ASDF
-											</TableCell>
-											<TableCell align="right">
 												{row?.quantity}
 											</TableCell>
 											<TableCell align="right">
 												{row?.price}
 											</TableCell>
+											<TableCell align="right">
+												{row?.price * row?.quantity}
+											</TableCell>
 										</TableRow>
 									))}
 								</TableBody>
+								<TableHead>
+									<TableRow>
+										<TableCell colSpan={3}>
+											Grand Total
+										</TableCell>
+										<TableCell align="right">
+											{totalPrice}
+										</TableCell>
+									</TableRow>
+								</TableHead>
 							</Table>
 						</TableContainer>
 					</CardContent>

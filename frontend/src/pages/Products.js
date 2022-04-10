@@ -8,6 +8,7 @@ import ProductTable from "../components/Dashboard/tables/ProductTable";
 import ProductCreateForm from "../components/Dashboard/Forms/ProductCreateForm";
 import FormModal from "../components/FormModal";
 import SearchBox from "../components/SearchBox";
+import CachedIcon from "@mui/icons-material/Cached";
 
 const Products = () => {
 	const [open, setOpen] = React.useState(false);
@@ -31,6 +32,10 @@ const Products = () => {
 	const handleProductEdit = (product) => {
 		setEditProduct(product);
 		setOpen(true);
+	};
+
+	const refreshPage = () => {
+		dispatch(listProducts());
 	};
 
 	// product search handler
@@ -66,9 +71,19 @@ const Products = () => {
 					setSearchVal={setSearchVal}
 					handleSearch={handleSearch}
 				/>
-				<Button variant="contained" onClick={handleProductCreate}>
-					<AddIcon /> New Product
-				</Button>
+
+				<Box>
+					<Button
+						variant="contained"
+						onClick={refreshPage}
+						sx={{ mr: 1 }}
+					>
+						<CachedIcon />
+					</Button>
+					<Button variant="contained" onClick={handleProductCreate}>
+						<AddIcon /> New Product
+					</Button>
+				</Box>
 			</Box>
 
 			<ProductTable

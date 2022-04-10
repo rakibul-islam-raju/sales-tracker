@@ -128,11 +128,13 @@ const SalesTable = ({ searchVal }) => {
 			>
 				<TableHead>
 					<TableRow>
-						<TableCell>Customer</TableCell>
+						<TableCell>Invoice ID</TableCell>
+						<TableCell align="right">Customer Name</TableCell>
 						<TableCell align="right">Phone</TableCell>
 						<TableCell align="right">Email</TableCell>
 						<TableCell align="right">Total Item</TableCell>
 						<TableCell align="right">Total Price</TableCell>
+						<TableCell align="right">Sale Date</TableCell>
 						<TableCell align="right">Actions</TableCell>
 					</TableRow>
 				</TableHead>
@@ -146,7 +148,10 @@ const SalesTable = ({ searchVal }) => {
 								},
 							}}
 						>
-							<TableCell>{row?.customer?.name}</TableCell>
+							<TableCell>DEMO1234</TableCell>
+							<TableCell align="right">
+								{row?.customer?.name}
+							</TableCell>
 							<TableCell align="right">
 								{row?.customer?.phone}
 							</TableCell>
@@ -157,6 +162,9 @@ const SalesTable = ({ searchVal }) => {
 								{(row?.sale_items).length}
 							</TableCell>
 							<TableCell align="right">500</TableCell>
+							<TableCell align="right">
+								{new Date(row?.created_at).toLocaleDateString()}
+							</TableCell>
 							<TableCell align="right">
 								<ButtonGroup>
 									<Button
