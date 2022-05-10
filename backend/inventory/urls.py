@@ -9,6 +9,7 @@ from .views import (
     CustomerDetailView,
     SalesView,
     SaleDetailView,
+    SalesReportView,
 )
 
 urlpatterns = [
@@ -20,4 +21,5 @@ urlpatterns = [
     path("customers/<int:pk>/", CustomerDetailView.as_view(), name="customer_details"),
     path("sales/", SalesView.as_view(), name="sales_list_create"),
     path("sales/<int:pk>/", SaleDetailView.as_view(), name="sales_details"),
+    path("sales/last-week/", SalesReportView.as_view(), name="last_week_sales"),
 ]

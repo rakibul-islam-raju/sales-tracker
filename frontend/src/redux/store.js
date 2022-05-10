@@ -37,6 +37,7 @@ import {
 	saleEditReducer,
 	saleDeleteReducer,
 } from "./redurers/saleReducers";
+import { saleReportListReducer } from "./redurers/reportReducers";
 import { bucketReducer } from "./redurers/bucketReducers";
 
 // Combine reducers
@@ -70,6 +71,8 @@ const reducer = combineReducers({
 	saleDetail: saleDetailReducer,
 	saleEdit: saleEditReducer,
 	saleDelete: saleDeleteReducer,
+	// report
+	saleReportList: saleReportListReducer,
 	// bucket
 	bucket: bucketReducer,
 });

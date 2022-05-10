@@ -1,23 +1,65 @@
+import React, { useEffect } from "react";
+import Box from "@mui/material/Box";
+import {
+	LineChart,
+	Line,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	Legend,
+	ResponsiveContainer,
+} from "recharts";
 import { Typography } from "@mui/material";
-import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { listSaleReports } from "../redux/actions/reportActions";
 
 const Dashboard = () => {
+	const dispatch = useDispatch();
+
+	const saleReportList = useSelector((state) => state.saleReportList);
+	const { loading, error, data } = saleReportList;
+
+	console.log("data =>", data);
+
+	useEffect(() => {
+		dispatch(listSaleReports());
+	}, [dispatch]);
+
 	return (
-		<Typography paragraph>
-			Lorem ipsum dolor sit amet.........., consectetur adipiscing elit,
-			sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-			Rhoncus dolor purus non enim praesent elementum facilisis leo vel.
-			Risus at ultrices mi tempus imperdiet. Semper risus in hendrerit
-			gravida rutrum quisque non tellus. Convallis convallis tellus id
-			interdum velit laoreet id donec ultrices. Odio morbi quis commodo
-			odio aenean sed adipiscing. Amet nisl suscipit adipiscing bibendum
-			est ultricies integer quis. Cursus euismod quis viverra nibh cras.
-			Metus vulputate eu scelerisque felis imperdiet proin fermentum leo.
-			Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
-			lobortis feugiat vivamus at augue. At augue eget arcu dictum varius
-			duis at consectetur lorem. Velit sed ullamcorper morbi tincidunt.
-			Lorem donec massa sapien faucibus et molestie ac.
-		</Typography>
+		<>
+			<Box>
+				<Typography variant="h4" gutterBottom>
+					Last Week Sales
+				</Typography>
+				{/* <ResponsiveContainer width="100%" height="100%"> */}
+				<LineChart
+					width={1000}
+					height={450}
+					data={data?.results}
+					margin={{
+						top: 5,
+						right: 30,
+						left: 20,
+						bottom: 5,
+					}}
+				>
+					<CartesianGrid strokeDasharray="3 3" />
+					<XAxis dataKey="name" />
+					<YAxis />
+					<Tooltip />
+					<Legend />
+					<Line
+						type="monotone"
+						dataKey="created_at"
+						stroke="#8884d8"
+						activeDot={{ r: 8 }}
+					/>
+					<Line type="monotone" dataKey="id" stroke="#82ca9d" />
+				</LineChart>
+				{/* </ResponsiveContainer> */}
+			</Box>
+		</>
 	);
 };
 

@@ -88,3 +88,17 @@ class SaleSerializer(serializers.ModelSerializer):
         items = obj.sale_items.all()
         serilizer = SaleItemSerializer(items, many=True)
         return serilizer.data
+
+
+class SaleReportSerializer(serializers.ModelSerializer):
+    sale_items = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = Sale
+        fields = "__all__"
+        read_only_fields = ["id"]
+
+    def get_sale_items(self, obj):
+        items = obj.sale_items.all()
+        serilizer = SaleItemSerializer(items, many=True)
+        return serilizer.data

@@ -1,5 +1,4 @@
-from datetime import datetime
-import pdb
+from datetime import datetime, timedelta
 from rest_framework.permissions import (
     AllowAny,
     IsAdminUser,
@@ -23,6 +22,7 @@ from .serializers import (
     SaleSerializer,
     SaleItemSerializer,
     SaleCreateSerializer,
+    SaleReportSerializer,
 )
 
 
@@ -167,3 +167,10 @@ class SaleDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SaleSerializer
     queryset = Sale.objects.all()
     permission_classes = [IsAuthenticated]
+
+
+class SalesReportView(generics.ListAPIView):
+    serializer_class = SaleReportSerializer
+
+    def get_queryset(self):
+        return Sale.objects.filter(created_at__gte=datetime.now() - timedelta(days=7))
