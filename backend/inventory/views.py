@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta
 from rest_framework.permissions import (
     AllowAny,
@@ -9,6 +10,7 @@ from rest_framework import generics
 from rest_framework import filters
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.views import APIView
 from django_filters.rest_framework import DjangoFilterBackend
 
 from inventory.models import Category, Product, Customer, Sale, SaleItem
@@ -169,8 +171,21 @@ class SaleDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
 
-class SalesReportView(generics.ListAPIView):
-    serializer_class = SaleReportSerializer
-
+class SalesReportView(APIView):
     def get_queryset(self):
         return Sale.objects.filter(created_at__gte=datetime.now() - timedelta(days=7))
+
+    def get(self, request, format=None):
+        sales = SaleItem.objects.filter(
+            created_at__gte=datetime.now() - timedelta(days=7)
+        )
+        data = {}
+        for i in sales:
+            if not data.get(str(i.created_at.date())):
+                data[str(i.created_at.date())] = i.price
+            else:
+                data[str(i.created_at.date())] = (
+                    data[str(i.created_at.date())] + i.price
+                )
+
+        return Response(data)

@@ -82,6 +82,7 @@ class SaleItem(models.Model):
     product_code = models.CharField(max_length=20, null=True)
     quantity = models.PositiveIntegerField()
     price = models.FloatField(null=True)
+    created_at = models.DateTimeField(auto_now=True)
 
     def save(self, *args, **kwargs):
         if self.product.quantity < self.quantity:
