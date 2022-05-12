@@ -20,8 +20,6 @@ const Dashboard = () => {
 	const productList = useSelector((state) => state.productList);
 	const { loading, error, products } = productList;
 
-	console.log(products.results);
-
 	useEffect(() => {
 		dispatch(listProducts());
 	}, [dispatch]);
@@ -30,7 +28,7 @@ const Dashboard = () => {
 		<>
 			<Box>
 				<Typography variant="h4" gutterBottom>
-					Product Summary
+					Inventory Stock
 				</Typography>
 				{/* <ResponsiveContainer width="100%" height="100%"> */}
 				<LineChart
