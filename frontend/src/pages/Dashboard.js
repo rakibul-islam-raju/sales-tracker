@@ -12,31 +12,31 @@ import {
 } from "recharts";
 import { Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { listSaleReports } from "../redux/actions/reportActions";
+import { listProducts } from "../redux/actions/productActions";
 
 const Dashboard = () => {
 	const dispatch = useDispatch();
 
-	const saleReportList = useSelector((state) => state.saleReportList);
-	const { loading, error, data } = saleReportList;
+	const productList = useSelector((state) => state.productList);
+	const { loading, error, products } = productList;
 
-	console.log("data =>", data);
+	console.log(products.results);
 
 	useEffect(() => {
-		dispatch(listSaleReports());
+		dispatch(listProducts());
 	}, [dispatch]);
 
 	return (
 		<>
 			<Box>
 				<Typography variant="h4" gutterBottom>
-					Last Week Sales
+					Product Summary
 				</Typography>
 				{/* <ResponsiveContainer width="100%" height="100%"> */}
 				<LineChart
 					width={1000}
 					height={450}
-					data={data?.results}
+					data={products.results}
 					margin={{
 						top: 5,
 						right: 30,
@@ -51,11 +51,11 @@ const Dashboard = () => {
 					<Legend />
 					<Line
 						type="monotone"
-						dataKey="created_at"
+						dataKey="quantity"
 						stroke="#8884d8"
 						activeDot={{ r: 8 }}
 					/>
-					<Line type="monotone" dataKey="id" stroke="#82ca9d" />
+					<Line type="monotone" dataKey="price" stroke="#82ca9d" />
 				</LineChart>
 				{/* </ResponsiveContainer> */}
 			</Box>

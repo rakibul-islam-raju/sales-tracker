@@ -188,4 +188,4 @@ class SalesReportView(APIView):
                     data[str(i.created_at.date())] + i.price
                 )
 
-        return Response(data)
+        return Response([data])
