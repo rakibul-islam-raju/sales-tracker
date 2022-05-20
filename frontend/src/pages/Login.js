@@ -113,6 +113,12 @@ const Login = () => {
 					</Grid>
 				</Box>
 			</Box>
+
+			<Box sx={{ mt: 2, textAlign: "center" }}>
+				<Typography variant="body">Email: test@user.com</Typography>
+				<br />
+				<Typography variant="body">Password: test1234</Typography>
+			</Box>
 		</Container>
 	);
 };
